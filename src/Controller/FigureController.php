@@ -9,7 +9,10 @@ use App\Repository\FigureRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TexteaType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Form\FigureType;
+
 
 class FigureController extends AbstractController
 {
@@ -38,17 +41,44 @@ class FigureController extends AbstractController
 
     /**
      * @Route("/figure/new", name="figure_create")
+     * @Route("/figure/{id}/edit", name="figure_edit")
      */
-    public function create(Request $request, ObjectManager $manager){
-        $figure = new Figure();
+    public function form(Figure $figure = null,Request $request, ObjectManager $manager){
 
-        $form = $this->createFormBuilder($figure)
-                     ->add('title', TextareaType::class)
-                     ->add('content', TextType::class)
-                     ->add('image')
-                     ->getForm();
+        if(!$figure) {
+            $figure = new Figure();
+        }
+
+        $figure->setTitle("Titre d'exemple")
+               ->setContent("contenu ");
+
+        //$form = $this->createFormBuilder($figure)
+        //             ->add('title')
+        //             ->add('content')
+        //            ->add('image')
+        //          ->getForm();
+
+        $form = $this->createForm(FigureType::class, $figure);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()&& $form->isValid()){
+            if(!$figure->getId()){
+                $figure->setCreatedAt(new \Datetime());
+            }
+
+
+            $manager->persist($figure);
+            $manager->flush();
+
+            return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
+
+        }
+
+
         return $this->render('figure/create.html.twig',[
-            'formFigure' => $form->createView()
+            'formFigure' => $form->createView(),
+            'editMode' => $figure->getId() !== null
         ]);
     }
 
