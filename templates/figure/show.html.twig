@@ -4,7 +4,7 @@
 <article>
     <h2>{{ figure.title }}</h2>
     <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y')}}
-        à {{ figure.createAt | date('H:i')}} dans la catégorie politique</div>
+        à {{ figure.createAt | date('H:i')}} dans la catégorie politique {{ figure.category.title }}</div>
     <div class="content">
         <img src="{{ figure.image }}" alt="">
         {{ figure.content | raw }}
@@ -27,6 +27,7 @@
 
             </div>
     {% endfor %}
+
         {% if app.user %}
         {{ form_start(commentForm) }}
         {{ form_row(commentForm.author, {'attr': {'placeholder': "Votre nom"}}) }}
@@ -40,5 +41,6 @@
         <a href="{{ path('security_login') }}" class="btn btn-primary">
             Connexion
         </a>
+        {% endif %}
     </section>
 {% endblock %}
