@@ -47,6 +47,13 @@ class Figure
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="figures")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -135,4 +142,19 @@ class Figure
 
         return $this;
     }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
 }
+
+
