@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,6 +35,11 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $username;
 
     /**
@@ -45,6 +52,29 @@ class User implements UserInterface
      * @Assert\EqualTo(propertyPath="password", message="Vous n'avez pas tapé le même mot de passe")
      */
     public $confirm_password;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Image", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
+     */
+    private $comments;
+
+
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,6 +93,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
     public function getUsername(): ?string
     {
         return $this->username;
@@ -74,7 +116,6 @@ class User implements UserInterface
 
         return $this;
     }
-
     public function getPassword(): ?string
     {
         return $this->password;
@@ -87,6 +128,8 @@ class User implements UserInterface
         return $this;
     }
 
+
+
     public function eraseCredentials(){}
 
     public function getSalt() {}
@@ -94,4 +137,61 @@ class User implements UserInterface
     public function getRoles() {
         return ['ROLE_USER'];
     }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(Image $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

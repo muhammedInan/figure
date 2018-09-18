@@ -16,10 +16,7 @@ class Comment
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $author;
+
 
     /**
      * @ORM\Column(type="text")
@@ -32,27 +29,23 @@ class Comment
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Figure", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="Figure", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Figure;
+    private $figure;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
 
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
 
     public function getContent(): ?string
     {
@@ -80,12 +73,24 @@ class Comment
 
     public function getFigure(): ?Figure
     {
-        return $this->Figure;
+        return $this->figure;
     }
 
     public function setFigure(?Figure $Figure): self
     {
-        $this->Figure = $Figure;
+        $this->figure = $Figure;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

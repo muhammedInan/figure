@@ -5,10 +5,13 @@
 
     {{ form_start(form) }}
 
-    {{ form_row(form.username, {'label': 'nom d\'utilisateur','attr': {'placeholder':'nom d\utilisateur...'}}) }}
+    {{ form_row(form.firstname, {'label': 'prenom','attr': {'placeholder':'prenom...'}}) }}
+    {{ form_row(form.lastname, {'label': 'nom','attr': {'placeholder':'nom...'}}) }}
+    {{ form_row(form.username, {'label': 'username','attr': {'placeholder':'username...'}}) }}
     {{ form_row(form.email, {'label': 'Adresse email','attr': {'placeholder':'adresse email ...'}}) }}
     {{ form_row(form.password, {'label': 'password','attr': {'placeholder':'mot de passe...'}}) }}
     {{ form_row(form.confirm_password, {'label': 'confirmez','attr': {'placeholder':'répétez votre mot de passe'}}) }}
+    {{ form_row(form.image) }}
     <button type="submit" class="btn btn-success">Inscription</button>
     {{ form_end(form) }}
 

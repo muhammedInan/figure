@@ -10,7 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 use App\Entity\Figure;
+use App\Entity\User;
 use App\Repository\FigureRepository;
 use App\Form\FigureType;
 use App\Entity\Comment;
@@ -25,7 +28,6 @@ class FigureController extends AbstractController
     public function index(FigureRepository $repo)
     {
         //$repo = $this->getDoctrine()->getRepository(Figure::class);
-
         $figures = $repo->findAll();
 
         return $this->render('figure/index.html.twig', [
@@ -33,6 +35,7 @@ class FigureController extends AbstractController
             'figures' => $figures
         ]);
     }
+
 
     /**
      * @Route("/", name="home")
@@ -43,55 +46,94 @@ class FigureController extends AbstractController
     }
 
     /**
-     * @Route("/figure/new", name="figure_create")
-     * @Route("/figure/{id}/edit", name="figure_edit")
+     * @Route("/figure/create", name="figure_create", methods={"GET","POST"})
      */
-    public function form(Figure $figure = null,Request $request, ObjectManager $manager){
-
-        if(!$figure) {
-            $figure = new Figure();
-        }
-
-        $figure->setTitle("Titre d'exemple")
-               ->setContent("contenu ");
-
-        //$form = $this->createFormBuilder($figure)
-        //             ->add('title')
-        //             ->add('content')
-        //            ->add('image')
-        //          ->getForm();
-
+    public function create(Request $request)
+    {
+        $figure = new Figure();
         $form = $this->createForm(FigureType::class, $figure);
 
-        $form->handleRequest($request);
+        if('POST'=== $request->getMethod()){
+            $form->handleRequest($request);
+            if( $form->isValid()){
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($figure);
+               // dump($figure); die;
+                $manager->flush();
 
-        if($form->isSubmitted()&& $form->isValid()){
-            if(!$figure->getId()){
-                $figure->setCreateAt(new \Datetime());
+                return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
             }
 
 
-            $manager->persist($figure);
-            $manager->flush();
-
-            return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
-
         }
 
-
-        return $this->render('figure/create.html.twig',[
-            'formFigure' => $form->createView(),
-            'editMode' => $figure->getId() !== null
+        return $this->render('figure/create.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/figure/{id}/edit", name="figure_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Figure $figure)
+    {
+
+        $form = $this->createForm(FigureType::class, $figure);
+
+        if('POST'=== $request->getMethod()){
+            $form->handleRequest($request);
+            if( $form->isValid()){
+                $manager = $this->getDoctrine()->getManager();
+                $manager->persist($figure);
+                $manager->flush();
+                return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
+            }
+        }
+
+        return $this->render('figure/edit.html.twig', [
+            'form' => $form->createView(),
+
+
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/figure/{id}/deleteAction", name="figure_delete")
+     */
+    public function deleteAction(Request $request, Figure $figure)
+    {
+        $form = $this->createDeleteForm($figure);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($figure);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('home');
+    }
+
+    private function createDeleteForm(Figure $figure)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('figure_delete', array('id' => $figure->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+            ;
+    }
+
+
+
+
 
     /**
      * @Route("/figure/{id}", name="figure_show")
      */
     public function show(Figure $figure, Request $request, ObjectManager $manager){
-       // $repo = $this->getDoctrine()->getRepository(Figure::class);
 
-       // $figure = $repo->find($id);
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -100,7 +142,8 @@ class FigureController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $comment->setCreatedAt(new \DateTime())
-                    ->setFigure($figure);
+                    ->setFigure($figure)
+                    ->setAuthor($this->getUser());
 
           $manager->persist($comment);
           $manager->flush();
@@ -108,10 +151,11 @@ class FigureController extends AbstractController
           return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
 
         }
-
+        $deleteForm = $this->createDeleteForm($figure);
         return $this->render('figure/show.html.twig',[
             'figure' => $figure,
-            'commentForm' => $form->createView()
+            'commentForm' => $form->createView(),
+            'delete_form' => $deleteForm->createView(),
             ]);
     }
 
