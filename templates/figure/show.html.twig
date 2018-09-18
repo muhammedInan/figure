@@ -1,14 +1,33 @@
 {% extends 'base.html.twig' %}
+{%  block stylesheets %}
+    <style>
+        img{
+            height: 300px;
 
+
+        }
+    </style>
+{% endblock %}
 {% block body %}
 <article>
     <h2>{{ figure.title }}</h2>
     <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y')}}
         à {{ figure.createAt | date('H:i')}} dans la catégorie politique {{ figure.category.title }}</div>
     <div class="content">
-        <img src="{{ figure.image }}" alt="">
+        {% for image in figure.images %}
+        <img src="{{ asset(image.webPath) }}" alt="">
+            {{ form_start(delete_form) }}
+            <input type="submit"  class="btn btn-danger pull-left">
+            {{ form_end(delete_form) }}
+            <button type="submit" class="btn btn-success"> Supprimer </button>
+        {% endfor %}
         {{ figure.content | raw }}
     </div>
+    <div style='height :200px ;width :200px'>
+        {{ figure.video.video()|raw }}
+    </div>
+
+    <img src='{{ figure.video.image() }}' height='100px' width='100px'>
 </article>
 
     <section id="commentaires">
@@ -16,8 +35,11 @@
     {%  for comment in figure.comments %}
         <div class=comment">
             <div class="row">
+                <div>
+                    <img src ="{{ asset(comment.author.image.webPath) }}">
+                </div>
                 <div class="col-3">
-                    {{ comment.author }} (<small>{{ comment.createdAt | date
+                    {{ comment.author.firstname }} {{ comment.author.lastname }} (<small>{{ comment.createdAt | date
                             ('d/m/Y à H:i')}}</small>
                 </div>
                 <div class="col">
@@ -30,7 +52,6 @@
 
         {% if app.user %}
         {{ form_start(commentForm) }}
-        {{ form_row(commentForm.author, {'attr': {'placeholder': "Votre nom"}}) }}
         {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaires"}}) }}
 
         <button type="submit" class="btn btn-success">Commenter !</button>

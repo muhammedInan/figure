@@ -12,7 +12,9 @@
         <h2>{{ figure.title }}</h2>
         <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y') }} à {{ figure.createAt | date('H:i') }}dans la catégorie politique</div>
         <div class="content">
-            <img src="{{ figure.image }}" alt="">
+            {% for image in figure.images %}
+                <img src="{{ image.webPath }}" alt="">
+            {% endfor %}
             {{ figure.content | raw }}
             <a href="{{ path('figure_show', {'id':figure.id}) }}" class="btn btn-primary">Lire la suite</a>
         </div>
