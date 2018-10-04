@@ -13,8 +13,10 @@ use App\Entity\User;
 
 class FigureFixtures extends Fixture
 {
+
     public function load(ObjectManager $manager)
     {
+
         $videos = [
             'https://www.youtube.com/watch?v=myZKTpqbAyg',
             'https://www.youtube.com/watch?v=n0F6hSpxaFc',
@@ -26,7 +28,6 @@ class FigureFixtures extends Fixture
             'https://www.youtube.com/watch?v=KoHzXi7Usl8',
             'https://www.youtube.com/watch?v=ewAPUJMprgI',
             'https://www.youtube.com/watch?v=tbD14cpo1qk',
-
         ];
 
         $images = [
@@ -41,7 +42,6 @@ class FigureFixtures extends Fixture
             'bc0c32ebf3a1975546ac6b3ce49b2b687057f6e2.jpeg',
         ];
 
-
         $faker = \Faker\Factory::create('fr_FR');
 
         $user = new User();
@@ -51,6 +51,7 @@ class FigureFixtures extends Fixture
         $user->setUsername('toto');
         $user->setPassword('totototo');
         $user->setLastname('inan');
+
         $image = new Image();
 
         $image->setPath('88ca9205e34a97a59d63f6bd90f83af9795f296a.jpeg');
@@ -72,36 +73,35 @@ class FigureFixtures extends Fixture
                 ->setContent($content)
                 ->setCreateAt($faker->DateTimeBetween('-6 months'))
                 ->setCategory($category);
+
             $video = new Video();
             $video->setUrl($videos[$j - 1]);
             $figure->setVideo($video);
 
             $image = new Image();
-
             $image->setPath($images[$j - 1]);
             $figure->addImage($image);
-
 
             $manager->persist($figure);
 
             //crée commentaire
             for ($k = 1; $k <= mt_rand(4, 6); $k++) {
                 $comment = new Comment();
+
                 $content = '<p>' . join($faker->paragraphs(2), '</p><p>') .
                     '</p>';
-                $days = (new \DateTime())->diff($figure->getCreateAt
-                ())->days;
+
+                $days = (new \DateTime())->diff($figure->getCreateAt())->days;
 
                 $comment->setAuthor($user)
                     ->setContent($content)
-                    ->setCreatedAt($faker->dateTimeBetween('-' .
-                        $days . 'days'))
+                    ->setCreatedAt($faker->dateTimeBetween('-' . $days . 'days'))
                     ->setFigure($figure);
 
                 $manager->persist($comment);
             }
         }
-
         $manager->flush();
     }
 }
+

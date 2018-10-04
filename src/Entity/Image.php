@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Image
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

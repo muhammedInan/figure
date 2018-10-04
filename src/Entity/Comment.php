@@ -10,14 +10,13 @@ use App\Entity\Image;
  */
 class Comment
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
-
-
 
     /**
      * @ORM\Column(type="text")
@@ -45,7 +44,6 @@ class Comment
     {
         return $this->id;
     }
-
 
 
     public function getContent(): ?string
@@ -96,3 +94,4 @@ class Comment
         return $this;
     }
 }
+

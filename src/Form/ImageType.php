@@ -21,14 +21,14 @@ class ImageType extends AbstractType
                     'placeholder' => 'Télécharger',
                     'accept' => '.jpg, .jpeg, .png',
                 ),
-            ))
-        ;
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-           'data_class' => Image::class,
+            'data_class' => Image::class,
         ]);
     }
 }
+

@@ -2,7 +2,7 @@
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
-{% block body  %}
+{% block body %}
     {% for message in app.flashes('info') %}
         <div class="alert alert-success">
             {{ message }}
@@ -10,23 +10,16 @@
     {% endfor %}
 
     <h1>Modifier la figure</h1>
-
-    {{  form_start(form) }}
+    {{ form_start(form) }}
     {{ form_row(form.title, {'attr': {'placeholder': "Titre de la figure"}}) }}
     {{ form_row(form.category) }}
     {{ form_row(form.content, {'attr': {'placeholder': "Contenu"}}) }}
     {{ form_row(form.video) }}
-    <ul class="tags" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
-    </ul>
+    <ul class="tags" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"></ul>
     <button type="submit" class="btn btn-success">
         Modifier la figure
     </button>
     {{ form_end(form) }}
-
-
-
-
-
 {% endblock %}
 
 {% block javascripts %}
@@ -55,13 +48,14 @@
             var $newFormLi = $('<li></li>').append(newForm);
             $newLinkLi.before($newFormLi);
         }
+
         var $collectionHolder;
 
         // setup an "add a tag" link
         var $addTagButton = $('<button type="button" class="add_tag_link">Add image</button>');
         var $newLinkLi = $('<li></li>').append($addTagButton);
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             // Get the ul that holds the collection of tags
             $collectionHolder = $('ul.tags');
 
@@ -72,13 +66,13 @@
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-            $addTagButton.on('click', function(e) {
+            $addTagButton.on('click', function (e) {
                 // add a new tag form (see next code block)
                 addTagForm($collectionHolder, $newLinkLi);
             });
-        });</script>
-
-
+        });
+    </script>
 {% endblock %}
+
 
 

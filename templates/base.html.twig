@@ -15,50 +15,46 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css" >
-
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
 {% block header %}
-<header>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ path('figure') }}">SnowTrick</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
-            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarColor02">
-        <ul class="nav navbar-nav d-flex flex-row justify-content-around">
-            <li class="nav-item"><a class="nav-link" href="{{ path('figure') }}">Les Figures</a></li>
-            {% if not app.user %}
-                <li class="nav-item"><a href="{{ path('security_login') }}" class="nav-link">Connexion</a></li>
-                <li class="nav-item"> <a href="{{ path('security_registration') }}" class="nav-link">Inscription</a></li>
-            {% else %}
-                <li class="nav-item"><a href="{{ path('security_logout') }}" class="nav-link">Deconnexion</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path('figure_create') }}">Ajouter une Figure</a></li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
-
-</header>
-
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="{{ path('figure') }}">SnowTrick</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="nav navbar-nav d-flex flex-row justify-content-around">
+                    <li class="nav-item"><a class="nav-link" href="{{ path('figure') }}">Les Figures</a></li>
+                    {% if not app.user %}
+                        <li class="nav-item"><a href="{{ path('security_login') }}" class="nav-link">Connexion</a></li>
+                        <li class="nav-item"><a href="{{ path('security_registration') }}"
+                                                class="nav-link">Inscription</a></li>
+                    {% else %}
+                        <li class="nav-item"><a href="{{ path('security_logout') }}" class="nav-link">Deconnexion</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('figure_create') }}">Ajouter une
+                                Figure</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
 {% endblock %}
-{% block wrapper  %}
-<section class="wrapper container">
-    {% block body %}{% endblock %}
-</section>
+{% block wrapper %}
+    <section class="wrapper container">
+        {% block body %}{% endblock %}
+    </section>
 {% endblock %}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 {% block javascripts %}{% endblock %}
-
-
 <footer class="text-center">
     <h5> 2018 Tous droits réservés- Politique de conidentialité</h5>
 </footer>
-
 </body>
 </html>
+
