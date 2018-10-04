@@ -55,7 +55,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Image", inversedBy="user", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $image;
 
@@ -65,15 +65,26 @@ class User implements UserInterface
     private $lastname;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", cascade={"persist"})
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Figure", mappedBy="user")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $figures;
 
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $change_password;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->figures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +135,17 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+    public function getChangePassword(): ?string
+    {
+        return $this->change_password;
+    }
+
+    public function setChangePassword(string $change_password): self
+    {
+        $this->change_password = $change_password;
 
         return $this;
     }
@@ -187,6 +209,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getAuthor() === $this) {
                 $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Figure[]
+     */
+    public function getFigures(): Collection
+    {
+        return $this->figures;
+    }
+
+    public function addFigure(Figure $figure): self
+    {
+        if (!$this->figures->contains($figure)) {
+            $this->figures[] = $figure;
+            $figure->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFigure(Figure $figure): self
+    {
+        if ($this->figures->contains($figure)) {
+            $this->figures->removeElement($figure);
+            // set the owning side to null (unless already changed)
+            if ($figure->getUser() === $this) {
+                $figure->setUser(null);
             }
         }
 

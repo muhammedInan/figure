@@ -3,28 +3,21 @@
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block body  %}
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 
  <h1>Création d'une figure</h1>
-
     {{  form_start(form) }}
-
     {{ form_row(form.title, {'attr': {'placeholder': "Titre de la figure"}}) }}
     {{ form_row(form.category) }}
     {{ form_row(form.content, {'attr': {'placeholder': "Contenu"}}) }}
     {{ form_row(form.video) }}
-    <ul class="tags" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
-
-    </ul>
-    <button type="submit" class="btn btn-success">
-
-
-
-      Ajouter la figure
-
-    </button>
+    <ul class="tags" data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"></ul>
+    <button type="submit" class="btn btn-success">Ajouter la figure</button>
     {{ form_end(form) }}
-
-
 
 {% endblock %}
 
@@ -57,7 +50,7 @@
     var $collectionHolder;
 
     // setup an "add a tag" link
-    var $addTagButton = $('<button type="button" class="add_tag_link">Add image</button>');
+    var $addTagButton = $('<button type="button" class="add_tag_link">Ajout image</button>');
     var $newLinkLi = $('<li></li>').append($addTagButton);
 
     jQuery(document).ready(function() {
@@ -75,7 +68,8 @@
             // add a new tag form (see next code block)
             addTagForm($collectionHolder, $newLinkLi);
         });
-    });</script>
+    });
+</script>
 
 
 {% endblock %}

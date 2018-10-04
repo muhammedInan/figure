@@ -2,49 +2,63 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
-    <link rel="stylesheet"
-          href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+    <title>{% block title %}Snowtrick{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Teko:400,700" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css" >
 
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
+{% block header %}
+<header>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ path('home') }}">SnowTrick</a>
+    <a class="navbar-brand" href="{{ path('figure') }}">SnowTrick</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
             aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarColor02">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('figure') }}">Les Figures</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('figure_create') }}">Crée une Figure</a>
-            </li>
+        <ul class="nav navbar-nav d-flex flex-row justify-content-around">
+            <li class="nav-item"><a class="nav-link" href="{{ path('figure') }}">Les Figures</a></li>
             {% if not app.user %}
-            <li class ="nav-item">
-                <a href="{{ path('security_login') }}" class="nav-link">
-                    Connexion
-                </a>
-            </li>
+                <li class="nav-item"><a href="{{ path('security_login') }}" class="nav-link">Connexion</a></li>
+                <li class="nav-item"> <a href="{{ path('security_registration') }}" class="nav-link">Inscription</a></li>
             {% else %}
-            <li class ="nav-item">
-                <a href="{{ path('security_logout') }}" class="nav-link">
-                    Deconnexion
-                </a>
-            </li>
+                <li class="nav-item"><a href="{{ path('security_logout') }}" class="nav-link">Deconnexion</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('figure_create') }}">Ajouter une Figure</a></li>
             {% endif %}
         </ul>
-
     </div>
 </nav>
-<div class="container">
-{% block body %}{% endblock %}
-</div>
+
+</header>
+
+{% endblock %}
+{% block wrapper  %}
+<section class="wrapper container">
+    {% block body %}{% endblock %}
+</section>
+{% endblock %}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 {% block javascripts %}{% endblock %}
+
+
+<footer class="text-center">
+    <h5> 2018 Tous droits réservés- Politique de conidentialité</h5>
+</footer>
+
 </body>
 </html>

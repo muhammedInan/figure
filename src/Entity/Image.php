@@ -21,7 +21,7 @@ class Image
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Figure", inversedBy="images")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $figure;
 
@@ -42,7 +42,7 @@ class Image
     protected $temp;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="image", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="image")
      */
     private $user;
 

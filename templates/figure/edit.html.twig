@@ -3,11 +3,15 @@
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block body  %}
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     <h1>Modifier la figure</h1>
 
     {{  form_start(form) }}
-
     {{ form_row(form.title, {'attr': {'placeholder': "Titre de la figure"}}) }}
     {{ form_row(form.category) }}
     {{ form_row(form.content, {'attr': {'placeholder': "Contenu"}}) }}

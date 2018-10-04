@@ -22,7 +22,7 @@ class Figure
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min=10, max=255, minMessage="Votre titre est court")
+     * @Assert\Length(min=3, max=255, minMessage="Votre titre est court")
      */
     private $title;
     /**
@@ -53,15 +53,21 @@ class Figure
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="figure", cascade={"ALL"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="figure", cascade={"All"})
      */
     private $images;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Video", cascade={ "All"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Video", cascade={ "All"}, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=true)
      */
     private $video;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="figures")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
 
 
@@ -189,14 +195,23 @@ class Figure
         return $this;
     }
 
+//    public function removeImage(Image $image): self
+//    {
+//        if ($this->images->contains($image)) {
+//            $this->images->removeElement($image);
+//            // set the owning side to null (unless already changed)
+//            if ($image->getFigure() === $this) {
+//                $image->setFigure(null);
+//            }
+//        }
+//
+//        return $this;
     public function removeImage(Image $image): self
     {
         if ($this->images->contains($image)) {
+            $image->setFigure($this);
             $this->images->removeElement($image);
             // set the owning side to null (unless already changed)
-            if ($image->getFigure() === $this) {
-                $image->setFigure(null);
-            }
         }
 
         return $this;
@@ -210,6 +225,18 @@ class Figure
     public function setVideo(Video $video): self
     {
         $this->video = $video;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
