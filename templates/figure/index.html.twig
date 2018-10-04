@@ -17,54 +17,48 @@
             bottom: 100px;
         }
 
-        h3{
+        h3 {
             text-align: center;
         }
-        .content img{
+
+        .content img {
             display: inline-block;
         }
 
-        article{
+        article {
             margin-left: 50px;
         }
     </style>
-
 {% endblock %}
 
 {% block wrapper %}
     <img src="{{ asset ('images/image8.jpg') }}" alt="presentation">
     <section id="image" class="container-fluid">
-
         <div class="heading">
-
-
             <div class="container-fluid">
                 <h1>SnowTrick</h1>
                 <p>Le site communautaire pour apprendre les figures de snowboard.</p>
             </div>
-
         </div>
     </section>
     <section class="figures">
-        <u> <h3>Liste des figures</h3></u>
-
+        <u><h3>Liste des figures</h3></u>
         {% for figure in figures %}
             <article>
                 <div>
-                    <a href="{{ path('figure_show', {'id':figure.id}) }}" ><h2>{{ figure.title }}</h2></a>
+                    <a href="{{ path('figure_show', {'id':figure.id}) }}"><h2>{{ figure.title }}</h2></a>
                 </div>
                 <div class="content">
                     {% for image in figure.images %}
                         <img src="{{ image.webPath }}" alt="figure">
                     {% endfor %}
-
-
                 </div>
             </article>
         {% endfor %}
         <div class="text-center">{{ knp_pagination_render(figures) }}</div>
     </section>
 {% endblock %}
+
 
 
 

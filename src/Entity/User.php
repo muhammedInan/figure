@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(
@@ -19,6 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User implements UserInterface
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -75,7 +75,6 @@ class User implements UserInterface
      */
     private $figures;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -127,6 +126,7 @@ class User implements UserInterface
 
         return $this;
     }
+
     public function getPassword(): ?string
     {
         return $this->password;
@@ -138,6 +138,7 @@ class User implements UserInterface
 
         return $this;
     }
+
     public function getChangePassword(): ?string
     {
         return $this->change_password;
@@ -150,13 +151,16 @@ class User implements UserInterface
         return $this;
     }
 
+    public function eraseCredentials()
+    {
+    }
 
+    public function getSalt()
+    {
+    }
 
-    public function eraseCredentials(){}
-
-    public function getSalt() {}
-
-    public function getRoles() {
+    public function getRoles()
+    {
         return ['ROLE_USER'];
     }
 
@@ -245,6 +249,5 @@ class User implements UserInterface
 
         return $this;
     }
-
-
 }
+

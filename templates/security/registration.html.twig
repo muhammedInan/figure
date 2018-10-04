@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1>bonjour a tous</h1>
+    <h1>bonjour a tous</h1>
 
     {{ form_start(form) }}
-
     {{ form_row(form.firstname, {'label': 'prenom','attr': {'placeholder':'prenom...'}}) }}
     {{ form_row(form.lastname, {'label': 'nom','attr': {'placeholder':'nom...'}}) }}
     {{ form_row(form.username, {'label': 'username','attr': {'placeholder':'username...'}}) }}
@@ -14,5 +13,4 @@
     {{ form_row(form.image) }}
     <button type="submit" class="btn btn-success">Inscription</button>
     {{ form_end(form) }}
-
-{% endblock  %}
+{% endblock %}

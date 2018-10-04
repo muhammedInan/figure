@@ -176,6 +176,7 @@ class FigureController extends AbstractController
             $request->query->get('page', 1)/*le numéro de la page à afficher*/,
             10/*nbre d'éléments par page*/
         );
+
         $deleteForm = $this->createDeleteForm($figure);
 
         return $this->render('figure/show.html.twig', [

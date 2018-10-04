@@ -71,9 +71,7 @@
         <div class="metadata"> Dans la catégorie: {{ figure.category.title }}</div>
     </article>
     </br>
-
     <section id="commentaires">
-
         {% if app.user %}
             {{ form_start(commentForm) }}
             {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaires est obligatoire"}}) }}
@@ -102,7 +100,6 @@
                     </div>
                 </div>
             </div>
-
         {% endfor %}
         <div class="text-center">{{ knp_pagination_render(comments) }}</div>
     </section>

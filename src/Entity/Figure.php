@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Figure
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -25,10 +26,12 @@ class Figure
      * @Assert\Length(min=3, max=255, minMessage="Votre titre est court")
      */
     private $title;
+
     /**
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(type="string", length=255)
      */
+
     private $slug;
     /**
      * @ORM\Column(type="text")
@@ -68,9 +71,6 @@ class Figure
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
-
-
-
 
     public function __construct()
     {
@@ -195,17 +195,6 @@ class Figure
         return $this;
     }
 
-//    public function removeImage(Image $image): self
-//    {
-//        if ($this->images->contains($image)) {
-//            $this->images->removeElement($image);
-//            // set the owning side to null (unless already changed)
-//            if ($image->getFigure() === $this) {
-//                $image->setFigure(null);
-//            }
-//        }
-//
-//        return $this;
     public function removeImage(Image $image): self
     {
         if ($this->images->contains($image)) {
@@ -242,5 +231,4 @@ class Figure
     }
 
 }
-
 

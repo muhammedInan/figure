@@ -11,14 +11,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Video
 {
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
-
-
 
     /**
      * @ORM\Column(name="type", type="string", length=255)
@@ -48,6 +47,7 @@ class Video
     {
         $this->date = new \Datetime();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,7 +63,6 @@ class Video
         return $this->url = $url;
     }
 
-
     public function setType($type)
     {
         $this->type = $type;
@@ -71,12 +70,10 @@ class Video
         return $this;
     }
 
-
     public function getType()
     {
         return $this->type;
     }
-
 
     public function setIdentif($identif)
     {
@@ -85,12 +82,10 @@ class Video
         return $this;
     }
 
-
     public function getIdentif()
     {
         return $this->identif;
     }
-
 
     private function youtubeId($url)
     {
@@ -119,12 +114,11 @@ class Video
     {
         $tableaux = explode("/", $url);  // on découpe l’url grâce au « / »
 
-        $id = $tableaux[count($tableaux)-1];  // on reticent la dernière partie qui contient l’identifiant
+        $id = $tableaux[count($tableaux) - 1];  // on reticent la dernière partie qui contient l’identifiant
 
         $this->setIdentif($id);  // ajoute l’identifiant à l’attribut identif
 
         $this->setType('vimeo');  // signale qu’il s’agit d’une video vimeo et l’inscrit dans l’attribut $type
-
     }
 
     /**
@@ -139,66 +133,68 @@ class Video
         if (preg_match("#^(http|https)://www.youtube.com/#", $url))  // Si c’est une url Youtube on execute la fonction correspondante
         {
             $this->youtubeId($url);
-        }
-        else if((preg_match("#^(http|https)://www.dailymotion.com/#", $url))) // Si c’est une url Dailymotion on execute la fonction correspondante
+        } else if ((preg_match("#^(http|https)://www.dailymotion.com/#", $url))) // Si c’est une url Dailymotion on execute la fonction correspondante
         {
             $this->dailymotionId($url);
-        }
-        else if((preg_match("#^(http|https)://vimeo.com/#", $url))) // Si c’est une url Vimeo on execute la fonction correspondante
+        } else if ((preg_match("#^(http|https)://vimeo.com/#", $url))) // Si c’est une url Vimeo on execute la fonction correspondante
         {
             $this->vimeoId($url);
         }
-
     }
 
-    private  function url()
+    private function url()
     {
         $control = $this->getType();  // on récupère le type de la vidéo
         $id = strip_tags($this->getIdentif()); // on récupère son identifiant
 
-        if($control == 'youtube')
-        {
-            $embed = "https://www.youtube-nocookie.com/embed/".$id;
+        if ($control == 'youtube') {
+            $embed = "https://www.youtube-nocookie.com/embed/" . $id;
+
             return $embed;
-        }
-        else if ($control == 'dailymotion')
-        {
-            $embed = "https://www.dailymotion.com/embed/video/".$id;
+
+        } else if ($control == 'dailymotion') {
+            $embed = "https://www.dailymotion.com/embed/video/" . $id;
+
             return $embed;
-        }
-        else if($control == 'vimeo')
-        {
-            $embed = "https://player.vimeo.com/video/".$id;
+
+        } else if ($control == 'vimeo') {
+            $embed = "https://player.vimeo.com/video/" . $id;
+
             return $embed;
+
         }
     }
+
     public function image()
     {
         $control = $this->getType();  // on récupère le type de la vidéo
         $id = strip_tags($this->getIdentif()); // on récupère son identifiant
 
-        if($control == 'youtube')
-        {
-            $image = 'https://img.youtube.com/vi/'. $id. '/hqdefault.jpg';
-            return $image;
-        }
-        else if ($control == 'dailymotion')
-        {
-            $image = 'https://www.dailymotion.com/thumbnail/150x120/video/'. $id. '' ;
-            return $image;
-        }
-        else if($control == 'vimeo')
-        {
-            $hash = unserialize(file_get_contents("https://vimeo.com/api/v2/video/".$id.".php"));
-            $image = $hash[0]['thumbnail_small'];
-            return $image;
-        }
+        if ($control == 'youtube') {
+            $image = 'https://img.youtube.com/vi/' . $id . '/hqdefault.jpg';
 
+            return $image;
+
+        } else if ($control == 'dailymotion') {
+            $image = 'https://www.dailymotion.com/thumbnail/150x120/video/' . $id . '';
+
+            return $image;
+
+        } else if ($control == 'vimeo') {
+            $hash = unserialize(file_get_contents("https://vimeo.com/api/v2/video/" . $id . ".php"));
+            $image = $hash[0]['thumbnail_small'];
+
+            return $image;
+
+        }
     }
 
     public function video()
     {
-        $video = "<iframe width='100%' height='100%' src='".$this->url()."'  frameborder='0'  allowfullscreen></iframe>";
+        $video = "<iframe width='100%' height='100%' src='" . $this->url() . "'  frameborder='0'  allowfullscreen></iframe>";
+
         return $video;
+
     }
 }
+
