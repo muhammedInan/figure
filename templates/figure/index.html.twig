@@ -1,26 +1,70 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block stylesheets %}
+    <style>
+        .navbar {
+            margin-bottom: 0;
+        }
 
+        h1 {
+            position: relative;
+            bottom: 100px;
+        }
 
-{% block body %}
+        p {
+            position: relative;
+            bottom: 100px;
+        }
 
-<section class="figures">
+        h3{
+            text-align: center;
+        }
+        .content img{
+            display: inline-block;
+        }
 
-    {% for figure in figures %}
-    <article>
-        <h2>{{ figure.title }}</h2>
-        <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y') }} à {{ figure.createAt | date('H:i') }}dans la catégorie politique</div>
-        <div class="content">
-            {% for image in figure.images %}
-                <img src="{{ image.webPath }}" alt="">
-            {% endfor %}
-            {{ figure.content | raw }}
-            <a href="{{ path('figure_show', {'id':figure.id}) }}" class="btn btn-primary">Lire la suite</a>
-        </div>
-    </article>
-    {% endfor %}
-</section>
+        article{
+            margin-left: 50px;
+        }
+    </style>
+
 {% endblock %}
+
+{% block wrapper %}
+    <img src="{{ asset ('images/image8.jpg') }}" alt="presentation">
+    <section id="image" class="container-fluid">
+
+        <div class="heading">
+
+
+            <div class="container-fluid">
+                <h1>SnowTrick</h1>
+                <p>Le site communautaire pour apprendre les figures de snowboard.</p>
+            </div>
+
+        </div>
+    </section>
+    <section class="figures">
+        <u> <h3>Liste des figures</h3></u>
+
+        {% for figure in figures %}
+            <article>
+                <div>
+                    <a href="{{ path('figure_show', {'id':figure.id}) }}" ><h2>{{ figure.title }}</h2></a>
+                </div>
+                <div class="content">
+                    {% for image in figure.images %}
+                        <img src="{{ image.webPath }}" alt="figure">
+                    {% endfor %}
+
+
+                </div>
+            </article>
+        {% endfor %}
+        <div class="text-center">{{ knp_pagination_render(figures) }}</div>
+    </section>
+{% endblock %}
+
 
 

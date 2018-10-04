@@ -1,23 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{%  block stylesheets %}
-<style>
-    img{
-        height: 300px;
-
-
-    }
-</style>
-{% endblock  %}
-
 {% block body %}
-    <h1>Bienvenue sur Snowtricks !</h1>
 
 
-<section id="image" class="container-fluid">
-    <img src="images/image8.jpg" alt="presentation">
-    <div class="heading1">
-    </div>
-</section>
+
+    <section id="image" class="container-fluid">
+        <div class="row">
+
+
+            <div class=" heading">
+                <h1>SnowTrick</h1>
+                <p>Le site communautaire pour apprendre les figures de snowboard.</p>
+            </div>
+            <img src="{{ asset ('images/image.jpg') }}" alt="presentation">
+        </div>
+    </section>
 
 {% endblock %}

@@ -1,0 +1,36 @@
+img {
+    height: auto;
+    width: 100%;
+}
+
+section .heading {
+    text-align: center;
+    color: black;
+    z-index: 1;
+    position: absolute;
+    top: 300px;
+    text-transform: uppercase;
+}
+
+.content img {
+    height: 200px;
+    width: 30%;
+}
+
+/* FOOTER*/
+footer {
+    background: #333;
+    padding: 20px 0 40px;
+    margin-top: 250px;
+}
+
+footer h5 {
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+
+
+

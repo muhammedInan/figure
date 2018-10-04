@@ -1,67 +1,109 @@
 {% extends 'base.html.twig' %}
-{%  block stylesheets %}
+
+{% block stylesheets %}
     <style>
-        img{
-            height: 300px;
+        .h1, h1 {
+            font-size: 15px;
+        }
 
+        article button {
+            position: relative;
+            bottom: 50px;
+            left: 100px;
+        }
 
+        a i {
+            position: relative;
+            bottom: 50px;
+            left: 250px;
+        }
+
+        article img {
+            position: center;
+        }
+
+        h2 {
+            position: relative;
+            left: 150px;
+        }
+
+        h4 {
+            position: relative;
+            top: 50px;
+        }
+
+        .row img {
+            height: 20px;
+            width: 50px;
         }
     </style>
 {% endblock %}
-{% block body %}
-<article>
-    <h2>{{ figure.title }}</h2>
-    <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y')}}
-        à {{ figure.createAt | date('H:i')}} dans la catégorie politique {{ figure.category.title }}</div>
-    <div class="content">
-        {% for image in figure.images %}
-        <img src="{{ asset(image.webPath) }}" alt="">
-            {{ form_start(delete_form) }}
-            <input type="submit"  class="btn btn-danger pull-left">
-            {{ form_end(delete_form) }}
-            <button type="submit" class="btn btn-success"> Supprimer </button>
-        {% endfor %}
-        {{ figure.content | raw }}
-    </div>
-    <div style='height :200px ;width :200px'>
-        {{ figure.video.video()|raw }}
-    </div>
 
-    <img src='{{ figure.video.image() }}' height='100px' width='100px'>
-</article>
+{% block body %}
+    <article>
+        {% for message in app.flashes('info') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="content">
+            <h4>Type de figure : </h4>
+            <div class="col-12"><h2 class="col-8">{{ figure.title }}</h2>
+                {% if app.user == figure.user %}
+                {{ form_start(delete_form, {'attr': {'class':'col-3'}}) }}
+                <button type="submit" class="btn btn-success"><i class="far fa-trash-alt"></i></button>
+                <a href="{{ path('figure_edit',{'id': figure.id} ) }}"><i class="far fa-edit"></i> </a>
+                {{ form_end(delete_form) }}</div>
+            {% endif %}
+            {% for image in figure.images %}
+                <img src="{{ asset(image.webPath) }}" alt="figure">
+            {% endfor %}
+        </div>
+        <strong><p>Description : </p></strong>
+        <div><p>{{ figure.content | raw }} </p></div>
+        <strong><p>Lien : </p></strong>
+        <div style='height :200px ;width :200px'>
+            {{ figure.video.video()|raw }}
+        </div>
+        </br>
+        <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y') }} à {{ figure.createAt | date('H:i') }}</div>
+        <div class="metadata"> Dans la catégorie: {{ figure.category.title }}</div>
+    </article>
+    </br>
 
     <section id="commentaires">
-       <h1> {{ figure.comments | length   }}Commentaires</h1>
-    {%  for comment in figure.comments %}
-        <div class=comment">
-            <div class="row">
-                <div>
-                    <img src ="{{ asset(comment.author.image.webPath) }}">
-                </div>
-                <div class="col-3">
-                    {{ comment.author.firstname }} {{ comment.author.lastname }} (<small>{{ comment.createdAt | date
-                            ('d/m/Y à H:i')}}</small>
-                </div>
-                <div class="col">
-                    {{ comment.content | raw}}
-                </div>
-            </div>
-
-            </div>
-    {% endfor %}
 
         {% if app.user %}
-        {{ form_start(commentForm) }}
-        {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaires"}}) }}
-
-        <button type="submit" class="btn btn-success">Commenter !</button>
-        {{ form_end(commentForm) }}
-
+            {{ form_start(commentForm) }}
+            {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaires est obligatoire"}}) }}
+            <div>
+                <button type="submit" class="btn btn-success">Commenter !</button>
+            </div>
+            {{ form_end(commentForm) }}
         {% else %}
-         <h2> vous ne pouvez pas commenter si vous n'êtes pas connecté</h2>
-        <a href="{{ path('security_login') }}" class="btn btn-primary">
-            Connexion
-        </a>
+            <h4> vous ne pouvez pas commenter si vous n'êtes pas connecté</h4>
+            <div><a href="{{ path('security_login') }}" class="btn btn-primary">Connexion</a></div>
         {% endif %}
+
+        <h1> {{ figure.comments | length }}Commentaires</h1>
+        {% for comment in comments %}
+            <div class=comment">
+                <div class="row">
+                    <div>
+                        <img src="{{ asset(comment.author.image.webPath) }}">
+                    </div>
+                    <div class="col-3">
+                        {{ comment.author.firstname }} {{ comment.author.lastname }}
+                        <small>{{ comment.createdAt | date ('d/m/Y à H:i') }} :</small>
+                    </div>
+                    <div class="col">
+                        <p>{{ comment.content | raw }}</p>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+        <div class="text-center">{{ knp_pagination_render(comments) }}</div>
     </section>
 {% endblock %}
