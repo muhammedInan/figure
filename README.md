@@ -1,3 +1,6 @@
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6777a3bd19964ddfa27458772790518c)](https://app.codacy.com/app/muhammedInan/p6?utm_source=github.com&utm_medium=referral&utm_content=muhammedInan/p6&utm_campaign=Badge_Grade_Dashboard)
+
 Snowtricks
 Jimmy Sweat est un entrepreneur ambitieux. Son objectif est d'en faire un outil pour apprendre les figures (tricks) du snowboard, de permettre la vulgarisation du snowboard auprès du plus grand nombre.
 
