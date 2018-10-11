@@ -20,3 +20,4 @@ Populate database : php bin/console doctrine:fixtures:load
 Run project : yarn run encore dev --watch
 That's it !
 https://app.codacy.com/project/muhammedInan/p6/dashboard
+DATABASE_URL=mysql://root:@127.0.0.1:3306/figure3
