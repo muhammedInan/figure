@@ -2,6 +2,15 @@
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
+{% block stylesheets %}
+    <style>
+        legend{
+            visibility: hidden;
+        }
+
+    </style>
+{% endblock %}
+
 {% block body %}
     {% for message in app.flashes('info') %}
         <div class="alert alert-success">

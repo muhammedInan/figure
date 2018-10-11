@@ -75,10 +75,6 @@ class User implements UserInterface
      */
     private $figures;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $change_password;
 
     public function __construct()
     {
@@ -139,17 +135,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getChangePassword(): ?string
-    {
-        return $this->change_password;
-    }
 
-    public function setChangePassword(string $change_password): self
-    {
-        $this->change_password = $change_password;
-
-        return $this;
-    }
 
     public function eraseCredentials()
     {
