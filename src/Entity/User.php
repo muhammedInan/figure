@@ -75,6 +75,19 @@ class User implements UserInterface
      */
     private $figures;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string",nullable=true)
+     */
+    private $validationToken = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string",nullable=true)
+     */
+    private $resetToken = null;
+
 
     public function __construct()
     {
@@ -134,6 +147,42 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getValidationToken()
+    {
+        return $this->validationToken;
+    }
+    /**
+     * @param string $validationToken
+     *
+     * @return self
+     */
+    public function setValidationToken($validationToken)
+    {
+        $this->validationToken = $validationToken;
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getResetToken()
+    {
+        return $this->resetToken;
+    }
+    /**
+     * @param string $resetToken
+     *
+     * @return self
+     */
+    public function setResetToken($resetToken)
+    {
+        $this->resetToken = $resetToken;
+        return $this;
+    }
+
 
 
 

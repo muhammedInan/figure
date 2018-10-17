@@ -42,6 +42,38 @@ class FigureFixtures extends Fixture
             'bc0c32ebf3a1975546ac6b3ce49b2b687057f6e2.jpeg',
         ];
 
+        if ($this->kernel->getEnvironment() == 'test') {
+            $perso = (new User())
+                ->setEmail('email@email.com')
+                ->setUsername('perso')
+                ->setPassword('password')
+                ->setImages((new Image())->setExtension('png'))
+                ->setIsActive(true)
+                ->setRoles(array('ROLE_USER'));
+            $persoConfirm = (new User())
+                ->setEmail('persoemail@email.com')
+                ->setUsername('persoconfirm')
+                ->setPassword('password')
+                ->setImages((new Image())->setExtension('png'))
+                ->setIsActive()
+                ->setValidationToken('my_test_validation_token')
+                ->setRoles(array('ROLE_USER'));
+            $persoReinitPass = (new User())
+                ->setEmail('passwordemail@email.com')
+                ->setUsername('persoreinit')
+                ->setPassword('password')
+                ->setImage((new Image())->setExtension('png'))
+                ->setIsActive(true)
+                ->setResetToken('my_test_reset_token')
+                ->setRoles(array('ROLE_USER'));
+
+            $password = $this->encoder->encodePassword($perso, $perso->getPassword());
+            $perso->setPassword($password);
+            $manager->persist($perso);
+            $manager->persist($persoConfirm);
+            $manager->persist($persoReinitPass);
+        }
+
         $faker = \Faker\Factory::create('fr_FR');
 
         $user = new User();

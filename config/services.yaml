@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    no-reply: 'muhammed-inan@outlook.com'
 
 services:
     # default configuration for services in *this* file
@@ -29,3 +30,19 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    
+      
+    App\Event\Subscriber\EmailSubscriber:
+        $sender: '%no-reply%'
+        
+    App\Event\Listener\VideoListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }    
+         #   - { name: doctrine.event_listener, event: preFlush }    
+        
+        
+    
+        
+  

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -10,26 +12,35 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
+
 use App\Entity\Figure;
 use App\Repository\FigureRepository;
 use App\Form\FigureType;
 use App\Entity\Comment;
 use App\Form\CommentType;
+use App\Event\Constants\ImageEvents;
+use App\Event\Constants\VideoEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Event\ImageCollectionEvent;
+use App\Event\VideoCollectionEvent;
+
 class FigureController extends AbstractController
 {
+    private $eventDispatcher;
+
+    public function  __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * @Route("/figure", name="figure")
      */
-    public function index(FigureRepository $repo, Request $request, PaginatorInterface $paginator)
+    public function index(FigureRepository $repo, Request $request)
     {
         //$repo = $this->getDoctrine()->getRepository(Figure::class);
         $figures = $repo->findAll();
-        $figures = $paginator->paginate(
-            $figures,
-            $request->query->get('page', 1)/*le numéro de la page à afficher*/,
-            4/*nbre d'éléments par page*/
-        );
+
         return $this->render('figure/index.html.twig', [
             'controller_name' => 'FigureController',
             'figures' => $figures
@@ -58,8 +69,13 @@ class FigureController extends AbstractController
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
                 $figure->setUser($user);
+                $event = new ImageCollectionEvent($figure->getImages());
+                $images = $this->eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
+                $figure->setImages($images->getImages());
                 $manager->persist($figure);
-                // dump($figure); die;
+                $event = new ImageCollectionEvent($figure->getImages());
+                $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
+               
                 $manager->flush();
                 $this->addFlash(
                     'info',
@@ -86,7 +102,11 @@ class FigureController extends AbstractController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
+                $event = new ImageCollectionEvent($figure->getImages());
+                $this->eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
                 $manager->persist($figure);
+                $event = new ImageCollectionEvent($figure->getImages());
+                $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
                 $manager->flush();
                 $this->addFlash(
                     'info',
@@ -112,7 +132,11 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $event = new ImageCollectionEvent($figure->getImages());
+            $this->eventDispatcher->dispatch(ImageEvents::PRE_REMOVE, $event);
             $em->remove($figure);
+            $event = new ImageCollectionEvent($figure->getImages());
+            $this->eventDispatcher->dispatch(ImageEvents::POST_REMOVE, $event);
             $em->flush();
         }
         return $this->redirectToRoute('figure');
@@ -127,7 +151,7 @@ class FigureController extends AbstractController
     /**
      * @Route("/figure/{id}", name="figure_show")
      */
-    public function show(Figure $figure, Request $request, ObjectManager $manager, PaginatorInterface $paginator)
+    public function show(Figure $figure, Request $request, ObjectManager $manager)
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -144,15 +168,11 @@ class FigureController extends AbstractController
             );
             return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
         }
-        $comments = $paginator->paginate(
-            $figure->getComments(),
-            $request->query->get('page', 1)/*le numéro de la page à afficher*/,
-            10/*nbre d'éléments par page*/
-        );
+
         $deleteForm = $this->createDeleteForm($figure);
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
-            'comments' => $comments,
+            'comments' => $figure->getComments(),
             'commentForm' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         ]);

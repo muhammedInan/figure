@@ -6,7 +6,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "fzaninotto/faker": "^1.8",
-        "knplabs/knp-paginator-bundle": "^2.8",
         "phpunit/phpunit": "^7.4",
         "sensio/framework-extra-bundle": "^5.2",
         "stof/doctrine-extensions-bundle": "^1.3",
