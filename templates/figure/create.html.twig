@@ -2,6 +2,15 @@
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
+{% block stylesheets %}
+    <style>
+         legend{
+             visibility: hidden;
+        }
+
+    </style>
+{% endblock %}
+
 {% block body %}
     {% for message in app.flashes('info') %}
         <div class="alert alert-success">
@@ -10,7 +19,6 @@
     {% endfor %}
 
     <h1>Création d'une figure</h1>
-
     {{ form_start(form) }}
     {{ form_row(form.title, {'attr': {'placeholder': "Titre de la figure"}}) }}
     {{ form_row(form.category) }}

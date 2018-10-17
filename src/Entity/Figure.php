@@ -185,6 +185,11 @@ class Figure
         return $this->images;
     }
 
+    public function setImages($images)
+    {
+         $this->images = $images;
+    }
+
     public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {

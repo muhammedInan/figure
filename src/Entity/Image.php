@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class Image
 {
@@ -82,7 +81,7 @@ class Image
         if (is_file($this->getAbsolutePath())) {
             // store the old name to delete after the update
             $this->temp = $this->getAbsolutePath();
-            $this->path = null;
+            
         } else {
             $this->path = 'initial';
         }
@@ -114,24 +113,21 @@ class Image
             : $this->getUploadRootDir().'/'.$this->path;
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
+
     public function preUpload()
     {
+
         if (null !== $this->getFile()) {
             $filename = sha1(uniqid(mt_rand(), true));
             $this->path = $filename.'.'.$this->getFile()->guessExtension();
+            
         }
     }
 
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
+
     public function upload()
-    {
+    { 
+        
         if (null === $this->getFile()) {
             return;
         }
@@ -159,17 +155,13 @@ class Image
         $this->setFile(null);
     }
 
-    /**
-     * @ORM\PreRemove()
-     */
+
     public function storeFilenameForRemove()
     {
         $this->temp = $this->getAbsolutePath();
     }
 
-    /**
-     * @ORM\PostRemove()
-     */
+
     public function removeUpload()
     {
         if (isset($this->temp)) {

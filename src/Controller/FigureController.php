@@ -12,34 +12,40 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
+
 use App\Entity\Figure;
 use App\Repository\FigureRepository;
 use App\Form\FigureType;
 use App\Entity\Comment;
 use App\Form\CommentType;
+use App\Event\Constants\ImageEvents;
+use App\Event\Constants\VideoEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Event\ImageCollectionEvent;
+use App\Event\VideoCollectionEvent;
 
 class FigureController extends AbstractController
 {
+    private $eventDispatcher;
+
+    public function  __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     /**
      * @Route("/figure", name="figure")
      */
-    public function index(FigureRepository $repo, Request $request, PaginatorInterface $paginator)
+    public function index(FigureRepository $repo, Request $request)
     {
         //$repo = $this->getDoctrine()->getRepository(Figure::class);
         $figures = $repo->findAll();
-        $figures = $paginator->paginate(
-            $figures,
-            $request->query->get('page', 1)/*le numéro de la page à afficher*/,
-            4/*nbre d'éléments par page*/
-        );
 
         return $this->render('figure/index.html.twig', [
             'controller_name' => 'FigureController',
             'figures' => $figures
         ]);
     }
-
     /**
      * @Route("/", name="home")
      */
@@ -47,34 +53,34 @@ class FigureController extends AbstractController
     {
         return $this->render('figure/home.html.twig');
     }
-
     /**
      * @Route("/figure/create", name="figure_create", methods={"GET","POST"})
      */
     public function create(Request $request)
     {
         $user = $this->getUser();
-
         if ($user == null) {
             throw $this->createAccessDeniedException();
         }
         $figure = new Figure();
-
         $form = $this->createForm(FigureType::class, $figure);
-
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
                 $figure->setUser($user);
+                $event = new ImageCollectionEvent($figure->getImages());
+                $images = $this->eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
+                $figure->setImages($images->getImages());
                 $manager->persist($figure);
-                // dump($figure); die;
+                $event = new ImageCollectionEvent($figure->getImages());
+                $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
+               
                 $manager->flush();
                 $this->addFlash(
                     'info',
                     'Added successfully'
                 );
-
                 return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
             }
         }
@@ -82,62 +88,59 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Route("/figure/{id}/edit", name="figure_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Figure $figure)
     {
         $user = $this->getUser();
-
         if ($user != $figure->getUser()) {
             throw $this->createAccessDeniedException();
         }
         $form = $this->createForm(FigureType::class, $figure);
-
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
-
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
+                $event = new ImageCollectionEvent($figure->getImages());
+                $this->eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
                 $manager->persist($figure);
+                $event = new ImageCollectionEvent($figure->getImages());
+                $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
                 $manager->flush();
                 $this->addFlash(
                     'info',
                     'Update successfully'
                 );
-
                 return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
             }
         }
-
         return $this->render('figure/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Route("/figure/{id}/delete", name="figure_delete")
      */
     public function delete(Request $request, Figure $figure)
     {
         $user = $this->getUser();
-
         if ($user != $figure->getUser()) {
             throw $this->createAccessDeniedException();
         }
         $form = $this->createDeleteForm($figure);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $event = new ImageCollectionEvent($figure->getImages());
+            $this->eventDispatcher->dispatch(ImageEvents::PRE_REMOVE, $event);
             $em->remove($figure);
+            $event = new ImageCollectionEvent($figure->getImages());
+            $this->eventDispatcher->dispatch(ImageEvents::POST_REMOVE, $event);
             $em->flush();
         }
-
         return $this->redirectToRoute('figure');
     }
-
     private function createDeleteForm(Figure $figure)
     {
         return $this->createFormBuilder()
@@ -145,23 +148,18 @@ class FigureController extends AbstractController
             ->setMethod('DELETE')
             ->getForm();
     }
-
     /**
      * @Route("/figure/{id}", name="figure_show")
      */
-    public function show(Figure $figure, Request $request, ObjectManager $manager, PaginatorInterface $paginator)
+    public function show(Figure $figure, Request $request, ObjectManager $manager)
     {
-
         $comment = new Comment();
-
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setCreatedAt(new \DateTime())
                 ->setFigure($figure)
                 ->setAuthor($this->getUser());
-
             $manager->persist($comment);
             $manager->flush();
             $this->addFlash(
@@ -169,22 +167,14 @@ class FigureController extends AbstractController
                 'Added successfully'
             );
             return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
-
         }
-        $comments = $paginator->paginate(
-            $figure->getComments(),
-            $request->query->get('page', 1)/*le numéro de la page à afficher*/,
-            10/*nbre d'éléments par page*/
-        );
 
         $deleteForm = $this->createDeleteForm($figure);
-
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
-            'comments' => $comments,
+            'comments' => $figure->getComments(),
             'commentForm' => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         ]);
     }
 }
-

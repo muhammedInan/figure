@@ -76,9 +76,18 @@ class User implements UserInterface
     private $figures;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(type="string",nullable=true)
      */
-    private $change_password;
+    private $validationToken = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string",nullable=true)
+     */
+    private $resetToken = null;
+
 
     public function __construct()
     {
@@ -139,17 +148,43 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getChangePassword(): ?string
+    /**
+     * @return string
+     */
+    public function getValidationToken()
     {
-        return $this->change_password;
+        return $this->validationToken;
     }
-
-    public function setChangePassword(string $change_password): self
+    /**
+     * @param string $validationToken
+     *
+     * @return self
+     */
+    public function setValidationToken($validationToken)
     {
-        $this->change_password = $change_password;
-
+        $this->validationToken = $validationToken;
         return $this;
     }
+    /**
+     * @return string
+     */
+    public function getResetToken()
+    {
+        return $this->resetToken;
+    }
+    /**
+     * @param string $resetToken
+     *
+     * @return self
+     */
+    public function setResetToken($resetToken)
+    {
+        $this->resetToken = $resetToken;
+        return $this;
+    }
+
+
+
 
     public function eraseCredentials()
     {

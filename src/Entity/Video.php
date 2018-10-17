@@ -7,8 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
- * @ORM\HasLifecycleCallbacks // Permet d’utiliser des événements
- */
+  */
 class Video
 {
 
@@ -89,6 +88,7 @@ class Video
 
     private function youtubeId($url)
     {
+        
         $tableaux = explode("=", $url);  // découpe l’url en deux  avec le signe ‘=’
 
         $this->setIdentif($tableaux[1]);  // ajoute l’identifiant à l’attribut identif
@@ -121,13 +121,10 @@ class Video
         $this->setType('vimeo');  // signale qu’il s’agit d’une video vimeo et l’inscrit dans l’attribut $type
     }
 
-    /**
-     * @ORM\PrePersist() // Les trois événement suivant s’exécute avant que l’entité soit enregister
-     * @ORM\PreUpdate()
-     * @ORM\PreFlush()
-     */
+
     public function extractIdentif()
     {
+        
         $url = $this->getUrl();  // on récupère l’url
 
         if (preg_match("#^(http|https)://www.youtube.com/#", $url))  // Si c’est une url Youtube on execute la fonction correspondante

@@ -4,11 +4,20 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Form\RegistrationType;
-use Symfony\Component\HttpFoundation\Request;
+use App\Form\ForgotPasswordType;
+use App\Form\ResetPasswordType;
+use App\Event\Constants\EmailEvents;
+use App\Event\EmailEvent;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+
 
 class SecurityController extends AbstractController
 {
@@ -52,41 +61,90 @@ class SecurityController extends AbstractController
     public function logout()
     {
     }
-
+    
     /**
-     * @Route("/resetPassword", name="security_reset_password")
+     * @Route("/forgot_password", name="security_forgotPassword")
      */
-    public function resetPassword(Request $request)
+    public function forgotPassword(Request $request, EventDispatcherInterface $eventDispatcher)
     {
-        $form = $this->createFormBuilder()
-            ->add('email')
-            ->getForm();
-
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(ForgotPasswordType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $data = $form->getData();
-            $user = $em->getRepository(User::class)->findOneByEmail($data['email']);
-            $user->setChangePassword(bin2hex(random_bytes(32)));
-            $em->persist($user);
-            $em->flush();
-
-            $message = new \Swift_Message();
-            $message->setSubject('email')
-                ->setFrom('muhammed-inan@outlook.com')
-                ->setTo('muhammed-inan@outlook.com')
-                ->setBody('email', 'text/html');
-
-            return $message;
-
+            $username = $form->getData()['username'];
+            $user = $em->getRepository(User::class)->findOneByUsername($username);
+            if (is_null($user)) {
+                $form->get('username')->addError(new FormError("Ce pseudo n'existe pas"));
+            } else {
+                $user->setResetToken(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
+                $em->persist($user);
+                $em->flush();
+                $event = new EmailEvent($user);
+                $eventDispatcher->dispatch(EmailEvents::FORGOT_PASSWORD, $event);
+                return $this->redirectToRoute('security_forgotPasswordConfirm');
+            }
         }
+        return $this->render(
+            'Password/forgot_password.html.twig',
+            ['form' => $form->createView()]
+        );
+    }
+    
+    /**
+     * @Route("/reset_password/{token}", name="security_resetPassword")
+     */
+    public function resetPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder, $token)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneByResetToken($token);
 
-        $mailer->send($message);
-        return $this->render('security/reset_password.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        if (is_null($user)) {
+            throw new NotFoundHttpException('Token invalide');
+        }
+        $emailUser = $user->getEmail();
+        $form = $this->createForm(ResetPasswordType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($emailUser != $form->getData()['email']) {
+                $form->get('email')->addError(new FormError("Ce n'est pas la bonne adresse email"));
+            } else {
+                $password = $passwordEncoder->encodePassword($user, $form->getData()['password']);
+                $user->setPassword($password);
+                $user->setResetToken(null);
+                $em->persist($user);
+                $em->flush();
+                $this->addFlash('add_tricks_success', 'Le mot de passe à été réinitialisé');
+                return $this->redirectToRoute('security_login');
+            }
+        }
+        return $this->render(
+            'Password/reset_password.html.twig',
+            ['form' => $form->createView()]
+        );
+    }
+    
+    /**
+     * @Route("/reset_password/{token}", name="security_resetPasswordConfirm")
+     */
+    public function resetPasswordConfirm()
+    {
+        return $this->render('Password/reset_password_confirm.html.twig');
+    }
+    
+    /**
+     * @Route("/forgot_password_confirm", name="security_forgotPasswordConfirm")
+     */
+    public function forgotPasswordConfirm()
+    {
+        return $this->render('Password/forgot_password_confirm.html.twig');
+    }
+    
+    /**
+     * @Route("/reset_password_confirm", name="security_registerConfirm")
+     */
+    public function registerConfirm()
+    {
+        return $this->render('Registration/register_confirm.html.twig');
     }
 }
 

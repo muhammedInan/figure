@@ -86,7 +86,7 @@
 
         <h1> {{ figure.comments | length }}Commentaires</h1>
         {% for comment in comments %}
-            <div class=comment">
+            <div class="comment">
                 <div class="row">
                     <div>
                         <img src="{{ asset(comment.author.image.webPath) }}">
@@ -101,6 +101,6 @@
                 </div>
             </div>
         {% endfor %}
-        <div class="text-center">{{ knp_pagination_render(comments) }}</div>
+        
     </section>
 {% endblock %}
