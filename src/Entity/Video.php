@@ -34,6 +34,12 @@ class Video
     private $date;
 
     /**
+    * @ORM\ManyToOne(targetEntity="App\Entity\figure", inversedBy="videos")
+    * @ORM\JoinColumn(nullable=true)
+    */
+    private $figure;
+
+    /**
      * @Assert\Regex(
      *     pattern="#^(http|https)://(www.youtube.com|www.dailymotion.com|vimeo.com)/#",
      *     match=true,
@@ -65,6 +71,18 @@ class Video
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getFigure()
+    {
+        return $this->figure;
+    }
+
+    public function setFigure(Figure $figure)
+    {
+        $this->figure = $figure;
 
         return $this;
     }

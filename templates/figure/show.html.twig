@@ -54,24 +54,34 @@
                 {{ form_start(delete_form, {'attr': {'class':'col-3'}}) }}
                 <button type="submit" class="btn btn-success"><i class="far fa-trash-alt"></i></button>
                 <a href="{{ path('figure_edit',{'id': figure.id} ) }}"><i class="far fa-edit"></i> </a>
-                {{ form_end(delete_form) }}</div>
+                {{ form_end(delete_form) }}
+            </div>
             {% endif %}
+            {% if app.user == figure.user %}
             {% for image in figure.images %}
-                <img src="{{ asset(image.webPath) }}" alt="figure">
+                
+                <a href="{{ path('image_remove',{id: image.id}) }}"><i class="my-remove-alert fas fa-trash-alt fa-2x"></i><img src="{{ asset(image.webPath) }}" alt="figure"></a>
             {% endfor %}
+            {% endif %}
         </div>
         <strong><p>Description : </p></strong>
         <div><p>{{ figure.content | raw }} </p></div>
         <strong><p>Lien : </p></strong>
-        <div style='height :200px ;width :200px'>
-            {{ figure.video.video()|raw }}
-        </div>
+        <div style="height :200px ;width :200px; display:inline">
+            {% if app.user == figure.user %}
+            {% for video in figure.videos %}
+               
+                <a href="{{ path('video_remove',{id: video.id}) }}"> {{ video.video()|raw }}<i class="my-remove-alert fas fa-trash-alt fa-2x"></i></a>
+                {% endfor %}
+                {% endif %}
+         </div>
         </br>
         <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y') }} à {{ figure.createAt | date('H:i') }}</div>
         <div class="metadata"> Dans la catégorie: {{ figure.category.title }}</div>
     </article>
     </br>
     <section id="commentaires">
+
         {% if app.user %}
             {{ form_start(commentForm) }}
             {{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaires est obligatoire"}}) }}
@@ -100,7 +110,17 @@
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if page > 1 %}
+                        <li class="page-item"><a class="page-link" href="{{path('figure_show',{'id':figure.id,'page':page - 1})}}">Previous</a></li>
+                    {% endif %}s
+                    {% if page < nb_pages %}
+                        <li class="page-item"><a class="page-link" href="{{path('figure_show',{'id':figure.id,'page':page + 1})}}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         {% endfor %}
-        
+
     </section>
 {% endblock %}

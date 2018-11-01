@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}Hello !{% endblock %}
 {% block stylesheets %}
     <style>
         .navbar {
@@ -55,6 +55,16 @@
                 </div>
             </article>
         {% endfor %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+           {% if page > 1 %}
+            <li class="page-item"><a class="page-link" href="{{path('figure',{'page':page - 1})}}">Previous</a></li>
+            {% endif %}
+            {% if page < nb_pages %}
+            <li class="page-item"><a class="page-link" href="{{path('figure',{'page':page + 1})}}">Next</a></li>
+            {% endif %}
+          </ul>
+        </nav>
      
     </section>
 {% endblock %}

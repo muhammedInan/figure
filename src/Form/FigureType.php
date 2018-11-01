@@ -29,7 +29,14 @@ class FigureType extends AbstractType
                 'by_reference' => false,
                 'error_bubbling' => false
             ))
-            ->add('video', VideoType::class);
+            ->add('videos', CollectionType::class, array(
+                'entry_type'	=>	VideoType::class,
+                'allow_add'		=> 	true,
+                'allow_delete'	=> 	true,
+                'by_reference'	=> 	false,
+                'error_bubbling' => false,
+                'required' =>true,
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

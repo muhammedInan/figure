@@ -9,10 +9,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ImageCollectionEvent extends Event
 {
       private $images;
+      
 
-     public function __construct(ArrayCollection $images)
+     public function __construct( $images )
      {
          $this->images = $images;
+         
      }
       public function getImages()
       {
