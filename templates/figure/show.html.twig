@@ -114,7 +114,7 @@
                 <ul class="pagination">
                     {% if page > 1 %}
                         <li class="page-item"><a class="page-link" href="{{path('figure_show',{'id':figure.id,'page':page - 1})}}">Previous</a></li>
-                    {% endif %}s
+                    {% endif %}
                     {% if page < nb_pages %}
                         <li class="page-item"><a class="page-link" href="{{path('figure_show',{'id':figure.id,'page':page + 1})}}">Next</a></li>
                     {% endif %}

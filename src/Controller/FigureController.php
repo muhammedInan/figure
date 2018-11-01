@@ -19,7 +19,7 @@ use App\Form\FigureType;
 use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Video;
-use App\Form\CommentType; 
+use App\Form\CommentType;
 use App\Event\Constants\ImageEvents;
 use App\Event\Constants\VideoEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -28,12 +28,11 @@ use App\Event\VideoCollectionEvent;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
-
 class FigureController extends AbstractController
 {
     private $eventDispatcher;
 
-    public function  __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -54,7 +53,7 @@ class FigureController extends AbstractController
             'figures' => $figures
         ]);
     }
-   
+
     /**
      * @Route("/load-more-comment/{id}/{page}")
      */
@@ -63,7 +62,7 @@ class FigureController extends AbstractController
         $pagination = $this->getParameter('pagination-comment');
         $em = $this->getDoctrine()->getManager();
         $comments = $em->getRepository(Comment::class)->getPaginateListOfComments($figure, $pagination, $page);
-        return $this->render('figure/show.html.twig', ['comments'=> $comments]);
+        return $this->render('figure/show.html.twig', ['comments' => $comments]);
     }
 
     /**
@@ -75,8 +74,9 @@ class FigureController extends AbstractController
         $pagination = $this->getParameter('pagination-figure');
         $em = $this->getDoctrine()->getManager();
         $figures = $em->getRepository(Figure::class)->getPaginateListOfFigures($pagination, $page);
-        return $this->render('figure/index.html.twig', ['figures'=> $figures]);
+        return $this->render('figure/index.html.twig', ['figures' => $figures]);
     }
+
     /**
      * @Route("/figure/create", name="figure_create", methods={"GET","POST"})
      */
@@ -112,14 +112,15 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route("/figure/{id}/edit", name="figure_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Figure $figure)
     {
-        
+
         $user = $this->getUser();
-        
+
         if ($user != $figure->getUser()) {
             throw $this->createAccessDeniedException();
         }
@@ -129,7 +130,7 @@ class FigureController extends AbstractController
             if ($form->isValid()) {
                 $manager = $this->getDoctrine()->getManager();
                 $event = new ImageCollectionEvent($figure->getImages());
-                //$this->eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
+                $this->eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
                 $manager->persist($figure);
                 $event = new ImageCollectionEvent($figure->getImages());
                 $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
@@ -145,6 +146,7 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route("/figure/{id}/delete", name="figure_delete")
      */
@@ -167,6 +169,7 @@ class FigureController extends AbstractController
         }
         return $this->redirectToRoute('figure');
     }
+
     private function createDeleteForm(Figure $figure)
     {
         return $this->createFormBuilder()
@@ -174,6 +177,7 @@ class FigureController extends AbstractController
             ->setMethod('DELETE')
             ->getForm();
     }
+
     /**
      * @Route("/figure/{id}", name="figure_show")
      */
@@ -187,7 +191,7 @@ class FigureController extends AbstractController
         $allComments = $em->getRepository(Comment::class)->findByFigure($figure);
         $nbPages = ceil(count($allComments) / 10);
         $commentpagi = $em->getRepository(Comment::class)->getPaginateListOfComments($page, $figure);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setCreatedAt(new \DateTime())
                 ->setFigure($figure)
@@ -221,7 +225,7 @@ class FigureController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $em->remove($image);
         $em->flush();
-        return $this->redirectToRoute('figure_show', ['id'=>$image->getFigure()->getId()]);
+        return $this->redirectToRoute('figure_show', ['id' => $image->getFigure()->getId()]);
     }
 
     /**
@@ -232,7 +236,7 @@ class FigureController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $em->remove($video);
         $em->flush();
-        return $this->redirectToRoute('figure_show', ['id'=>$video->getFigure()->getId()]);
+        return $this->redirectToRoute('figure_show', ['id' => $video->getFigure()->getId()]);
     }
-
 }
+

@@ -81,7 +81,7 @@ class Image
         if (is_file($this->getAbsolutePath())) {
             // store the old name to delete after the update
             $this->temp = $this->getAbsolutePath();
-            
+
         } else {
             $this->path = 'initial';
         }
@@ -103,14 +103,14 @@ class Image
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../public/'.$this->getUploadDir();
+        return __DIR__ . '/../../public/' . $this->getUploadDir();
     }
 
     public function getAbsolutePath()
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir().'/'.$this->path;
+            : $this->getUploadRootDir() . '/' . $this->path;
     }
 
 
@@ -119,15 +119,15 @@ class Image
 
         if (null !== $this->getFile()) {
             $filename = sha1(uniqid(mt_rand(), true));
-            $this->path = $filename.'.'.$this->getFile()->guessExtension();
-            
+            $this->path = $filename . '.' . $this->getFile()->guessExtension();
+
         }
     }
 
 
     public function upload()
-    { 
-        
+    {
+
         if (null === $this->getFile()) {
             return;
         }
@@ -173,7 +173,7 @@ class Image
     {
         return null === $this->path
             ? null
-            : $this->getUploadDir().'/'.$this->path;
+            : $this->getUploadDir() . '/' . $this->path;
     }
 
     public function getUser(): ?User
@@ -193,3 +193,4 @@ class Image
         return $this;
     }
 }
+

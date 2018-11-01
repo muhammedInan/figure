@@ -28,7 +28,7 @@ class VideoListener
             $entity->extractIdentif();
          }
 
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getEntity();
 
@@ -36,31 +36,22 @@ class VideoListener
         if (!$entity instanceof Video) {
             return;
         }
-        die('update');
+        
         $entityManager = $args->getEntityManager();
-
+        $this->uploadIdentif($args, $entity);
     }
 
-    
     private function uploadIdentif($args, $entity)
-    { 
+    {
 
         if (!$entity instanceof Video) {
-             
-           
-            return;
+         return;
         }
-        die('ok');
+
        foreach($entity->getVideos() as $video) {
             $video->extractIdentif();}
         $entityManager = $args->getObjectManager();
         $entityManager->persist($entity);
         $entityManager->flush();
-    // dump($video);die;
-        
-    
-            
-
     }
-
 }
