@@ -71,7 +71,7 @@ class Category
     /**
      * @return Collection|Figure[]
      */
-    public function getFigures(): Collection
+    public function getFigures()
     {
         return $this->figures;
     }

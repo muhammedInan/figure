@@ -14,7 +14,7 @@ use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Figure;
-use App\Repository\FigureRepository;
+use App\Repository\VideoRepository;
 use App\Form\FigureType;
 use App\Entity\Comment;
 use App\Entity\Image;
@@ -100,6 +100,9 @@ class FigureController extends AbstractController
                 $event = new ImageCollectionEvent($figure->getImages());
                 $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
 
+                $videoEvent = new VideoCollectionEvent($figure->getVideos()->toArray());
+                $this->eventDispatcher->dispatch(VideoEvents::PRE_EXTRACT_IDENTIF, $videoEvent);
+
                 $manager->flush();
                 $this->addFlash(
                     'info',
@@ -134,6 +137,10 @@ class FigureController extends AbstractController
                 $manager->persist($figure);
                 $event = new ImageCollectionEvent($figure->getImages());
                 $this->eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
+
+                $videoEvent = new VideoCollectionEvent($figure->getVideos()->toArray());
+                $this->eventDispatcher->dispatch(VideoEvents::PRE_EXTRACT_IDENTIF, $videoEvent);
+
                 $manager->flush();
                 $this->addFlash(
                     'info',
@@ -165,6 +172,8 @@ class FigureController extends AbstractController
             $em->remove($figure);
             $event = new ImageCollectionEvent($figure->getImages());
             $this->eventDispatcher->dispatch(ImageEvents::POST_REMOVE, $event);
+            $videoEvent = new VideoCollectionEvent($figure->getVideos()->toArray());
+            $this->eventDispatcher->dispatch(VideoEvents::PRE_EXTRACT_IDENTIF, $videoEvent);
             $em->flush();
         }
         return $this->redirectToRoute('figure');

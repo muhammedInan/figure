@@ -19,12 +19,12 @@ class Video
     private $id;
 
     /**
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
-     * @ORM\Column(name="identif", type="string", length=255)
+     * @ORM\Column(name="identif", type="string", length=255, nullable=true)
      */
     private $identif;
 

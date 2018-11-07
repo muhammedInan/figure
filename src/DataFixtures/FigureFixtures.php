@@ -78,7 +78,7 @@ class FigureFixtures extends Fixture
 
             $video = new Video();
             $video->setUrl($videos[$j - 1]);
-            $figure->setVideo($video);
+            $figure->setVideos($video);
 
             $image = new Image();
             $image->setPath($images[$j - 1]);
