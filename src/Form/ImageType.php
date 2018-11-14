@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Image;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 
 class ImageType extends AbstractType

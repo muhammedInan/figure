@@ -21,9 +21,9 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function getPaginateListOfComments($page = 1,Figure $figure, $nbElements = 10)
+    public function getPaginateListOfComments(Figure $figure,$page, $nbElements = 10)
     {
-        $firstResult = ($page - 1) * $nbElements;
+        $firstResult = ($page ) * $nbElements;
         return $this->createQueryBuilder('comment')
             ->where('comment.figure = :figure')
             ->setParameter('figure',$figure)

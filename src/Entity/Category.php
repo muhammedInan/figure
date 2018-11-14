@@ -25,11 +25,6 @@ class Category
     private $title;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
-
-    /**
      * @ORM\OneToMany(targetEntity="Figure", mappedBy="category")
      */
     private $figures;
@@ -56,17 +51,7 @@ class Category
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
 
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Figure[]

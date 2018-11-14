@@ -12,10 +12,13 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Doctrine\ORM\EntityManagerInterface;
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use App\Entity\Figure;
+use App\Entity\Category;
 use App\Repository\VideoRepository;
 use App\Form\FigureType;
+use App\Form\CategoryType;
+
 use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Video;
@@ -172,8 +175,7 @@ class FigureController extends AbstractController
             $em->remove($figure);
             $event = new ImageCollectionEvent($figure->getImages());
             $this->eventDispatcher->dispatch(ImageEvents::POST_REMOVE, $event);
-            $videoEvent = new VideoCollectionEvent($figure->getVideos()->toArray());
-            $this->eventDispatcher->dispatch(VideoEvents::PRE_EXTRACT_IDENTIF, $videoEvent);
+            
             $em->flush();
         }
         return $this->redirectToRoute('figure');
@@ -190,8 +192,10 @@ class FigureController extends AbstractController
     /**
      * @Route("/figure/{id}", name="figure_show")
      */
-    public function show(Figure $figure, Request $request, ObjectManager $manager, $page = 1)
+    public function show(Figure $figure, Request $request, ObjectManager $manager)
     {
+        $page = $request->query->get('page');
+
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -199,7 +203,11 @@ class FigureController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $allComments = $em->getRepository(Comment::class)->findByFigure($figure);
         $nbPages = ceil(count($allComments) / 10);
-        $commentpagi = $em->getRepository(Comment::class)->getPaginateListOfComments($page, $figure);
+        $commentpagi = $em->getRepository(Comment::class)->getPaginateListOfComments( $figure,$page);
+
+
+
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setCreatedAt(new \DateTime())

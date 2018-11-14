@@ -6,8 +6,8 @@
 parameters:
     locale: 'en'
     no-reply: 'muhammed-inan@outlook.com'
-    pagination-trick: 5
-    pagination-comment: 5
+    pagination-trick: 10
+    pagination-comment: 10
 
 services:
     # default configuration for services in *this* file

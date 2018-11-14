@@ -10,12 +10,23 @@ use App\Entity\Comment;
 use App\Entity\Video;
 use App\Entity\Image;
 use App\Entity\User;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 class FigureFixtures extends Fixture
 {
 
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
+
 
         $videos = [
             'https://www.youtube.com/watch?v=myZKTpqbAyg',
@@ -42,17 +53,35 @@ class FigureFixtures extends Fixture
             'bc0c32ebf3a1975546ac6b3ce49b2b687057f6e2.jpeg',
         ];
 
-
-
         $faker = \Faker\Factory::create('fr_FR');
 
-        $user = new User();
 
+        $user = (new User());
         $user->setEmail('muhammed-inan@outlook.com');
         $user->setFirstname('muhammed');
         $user->setUsername('toto');
         $user->setPassword('totototo');
         $user->setLastname('inan');
+        $userConfirm = (new User());
+        $userConfirm->setEmail('muhammed-inan@outlook.com');
+        $userConfirm->setFirstname('muhammed');
+        $userConfirm->setUsername('toto');
+        $userConfirm->setPassword('totototo');
+        $userConfirm->setLastname('inan');
+        $userConfirm->setValidationToken('my_test_validation_token');
+        $userReinit = (new User());
+        $userReinit->setEmail('muhammed-inan@outlook.com');
+        $userReinit->setUsername('toto');
+        $userReinit->setPassword('totototo');
+        $userReinit->setLastname('inan');
+        $userReinit->setResetToken('my_test_reset_token');
+
+        $password = $this->encoder->encodePassword($user, $user->getPassword());
+        $user->setPassword($password);
+        $manager->persist($user);
+        $manager->persist($userConfirm);
+        $manager->persist($userReinit);
+
 
         $image = new Image();
 
@@ -61,11 +90,12 @@ class FigureFixtures extends Fixture
 
         for ($i = 1; $i <= 3; $i++) {
             $category = new Category();
-            $category->setTitle($faker->sentence())
-                ->setDescription($faker->paragraph());
+            $category->setTitle($faker->sentence());
+
 
             $manager->persist($category);
         }
+
 
         for ($j = 1; $j <= 5; $j++) {
             $figure = new Figure();
@@ -76,34 +106,43 @@ class FigureFixtures extends Fixture
                 ->setCreateAt($faker->DateTimeBetween('-6 months'))
                 ->setCategory($category);
 
-            $video = new Video();
-            $video->setUrl($videos[$j - 1]);
-            $figure->setVideos($video);
 
-            $image = new Image();
-            $image->setPath($images[$j - 1]);
-            $figure->addImage($image);
+//            $video = new Video();
+//            $video->setUrl($videos[$j - 1]);
+//            $figure->setVideos($video);
+//            $image = new Image();
+//            $image->setPath($images[$j - 1]);
+//            $figure->addImage($image);
+
 
             $manager->persist($figure);
-
-            //crée commentaire
-            for ($k = 1; $k <= mt_rand(4, 6); $k++) {
-                $comment = new Comment();
-
-                $content = '<p>' . join($faker->paragraphs(2), '</p><p>') .
-                    '</p>';
-
-                $days = (new \DateTime())->diff($figure->getCreateAt())->days;
-
-                $comment->setAuthor($user)
-                    ->setContent($content)
-                    ->setCreatedAt($faker->dateTimeBetween('-' . $days . 'days'))
-                    ->setFigure($figure);
-
-                $manager->persist($comment);
-            }
         }
+
+//        for ($l = 1; $l <= 2; $l++) {
+//            $videos = new Video();
+//            $videos->setUrl($videos[$l - 1]);
+//            $videos->setIdentif($videos);
+//
+//            $manager->persist($videos);
+//        }
+
+
+        for ($k = 1; $k <= mt_rand(4, 6); $k++) {
+            $comment = new Comment();
+            $content = '<p>' . join($faker->paragraphs(2), '</p><p>') .
+                '</p>';
+            $days = (new \DateTime())->diff($figure->getCreateAt())->days;
+            $comment->setAuthor($user)
+                ->setContent($content)
+                ->setCreatedAt($faker->dateTimeBetween('-' . $days . 'days'))
+                ->setFigure($figure);
+            $manager->persist($comment);
+        }
+
+
         $manager->flush();
+
+
     }
 }
 
