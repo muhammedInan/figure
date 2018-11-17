@@ -55,6 +55,25 @@ class FigureFixtures extends Fixture
 
         $faker = \Faker\Factory::create('fr_FR');
 
+        foreach ($images as $k => $file_name) {
+            for($j=0;$j<=20;$j++) {
+                $image = new Image();
+                $image->setPath($k['public\images\uploads\image.jpg']);
+
+                $this->addReference('image-' . $k . 'mute' . $j, $image);
+                $manager->persist($image);
+            }
+        }
+
+        foreach ($videos as $v => $url) {
+            for($l=0;$l<=20;$l++) {
+                $video = new Video();
+                $video->extractIdentif($v['https://www.youtube.com/embed/KEdFwJ4SWq4']);
+
+                $this->addReference('video-' . $v . 'mute' . $l, $video);
+                $manager->persist($video);
+            }
+        }
 
         $user = (new User());
         $user->setEmail('muhammed-inan@outlook.com');
@@ -107,12 +126,9 @@ class FigureFixtures extends Fixture
                 ->setCategory($category);
 
 
-//            $video = new Video();
-//            $video->setUrl($videos[$j - 1]);
-//            $figure->setVideos($video);
-//            $image = new Image();
-//            $image->setPath($images[$j - 1]);
-//            $figure->addImage($image);
+
+
+
 
 
             $manager->persist($figure);
