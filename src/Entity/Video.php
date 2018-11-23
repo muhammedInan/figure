@@ -19,12 +19,12 @@ class Video
     private $id;
 
     /**
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
-     * @ORM\Column(name="identif", type="string", length=255)
+     * @ORM\Column(name="identif", type="string", length=255, nullable=true)
      */
     private $identif;
 
@@ -32,6 +32,12 @@ class Video
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="App\Entity\figure", inversedBy="videos")
+    * @ORM\JoinColumn(nullable=true)
+    */
+    private $figure;
 
     /**
      * @Assert\Regex(
@@ -65,6 +71,18 @@ class Video
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getFigure()
+    {
+        return $this->figure;
+    }
+
+    public function setFigure(Figure $figure)
+    {
+        $this->figure = $figure;
 
         return $this;
     }

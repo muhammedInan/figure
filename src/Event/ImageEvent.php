@@ -16,4 +16,5 @@ class ImageEvent extends Event
     {
         return $this->image;
     }
+    
 }

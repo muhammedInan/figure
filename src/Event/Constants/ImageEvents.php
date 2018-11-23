@@ -9,3 +9,4 @@ class ImageEvents
     const PRE_REMOVE = 'app.image.pre_remove';
     const POST_REMOVE = 'app.image.post_remove';
 }
+

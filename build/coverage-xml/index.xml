@@ -1,0 +1,466 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <build time="Sat Oct 27 22:21:35 GMT+0000 2018" phpunit="7.4.0" coverage="6.0.8">
+    <runtime name="PHP" version="7.2.3" url="https://secure.php.net/"/>
+    <driver name="xdebug" version="2.6.0"/>
+  </build>
+  <project source="C:\xampp\htdocs\p6\src">
+    <tests>
+      <test name="App\Tests\Controller\FigureControllerTest::testIndex" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Controller\FigureControllerTest::testDelete" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Entity\VideoTest::testYoutubeIntegration" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Entity\VideoTest::testDailyMotionIntegration" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Entity\VideoTest::testVimeoIntegration" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #0" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #1" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #2" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #3" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #4" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #5" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #6" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #7" size="unknown" result="0" status="PASSED"/>
+      <test name="App\Tests\Form\VideoTypeTest::testVideoTypeFormData with data set #8" size="unknown" result="0" status="PASSED"/>
+    </tests>
+    <directory name="/">
+      <totals>
+        <lines total="2768" comments="647" code="2121" executable="845" executed="111" percent="13.14"/>
+        <methods count="182" tested="27" percent="14.84"/>
+        <functions count="0" tested="0" percent="0"/>
+        <classes count="35" tested="2" percent="5.71"/>
+        <traits count="0" tested="0" percent="0"/>
+      </totals>
+      <directory name="Controller">
+        <totals>
+          <lines total="416" comments="55" code="361" executable="215" executed="20" percent="9.30"/>
+          <methods count="20" tested="3" percent="15.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="2" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="FigureController.php" href="Controller/FigureController.php.xml">
+          <totals>
+            <lines total="241" comments="28" code="213" executable="117" executed="20" percent="17.09"/>
+            <methods count="11" tested="3" percent="27.27"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="SecurityController.php" href="Controller/SecurityController.php.xml">
+          <totals>
+            <lines total="175" comments="27" code="148" executable="98" executed="0" percent="0.00"/>
+            <methods count="9" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="DataFixtures">
+        <totals>
+          <lines total="139" comments="2" code="137" executable="99" executed="0" percent="0.00"/>
+          <methods count="1" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="1" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="FigureFixtures.php" href="DataFixtures/FigureFixtures.php.xml">
+          <totals>
+            <lines total="139" comments="2" code="137" executable="99" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Entity">
+        <totals>
+          <lines total="1164" comments="297" code="867" executable="252" executed="71" percent="28.17"/>
+          <methods count="105" tested="18" percent="17.14"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="6" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="Category.php" href="Entity/Category.php.xml">
+          <totals>
+            <lines total="102" comments="22" code="80" executable="19" executed="0" percent="0.00"/>
+            <methods count="9" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Comment.php" href="Entity/Comment.php.xml">
+          <totals>
+            <lines total="97" comments="22" code="75" executable="13" executed="0" percent="0.00"/>
+            <methods count="9" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Figure.php" href="Entity/Figure.php.xml">
+          <totals>
+            <lines total="267" comments="54" code="213" executable="57" executed="9" percent="15.79"/>
+            <methods count="26" tested="5" percent="19.23"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Image.php" href="Entity/Image.php.xml">
+          <totals>
+            <lines total="195" comments="50" code="145" executable="47" executed="3" percent="6.38"/>
+            <methods count="17" tested="1" percent="5.88"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="User.php" href="Entity/User.php.xml">
+          <totals>
+            <lines total="288" comments="79" code="209" executable="51" executed="0" percent="0.00"/>
+            <methods count="27" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Video.php" href="Entity/Video.php.xml">
+          <totals>
+            <lines total="215" comments="70" code="145" executable="65" executed="59" percent="90.77"/>
+            <methods count="17" tested="12" percent="70.59"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Event">
+        <totals>
+          <lines total="273" comments="1" code="272" executable="113" executed="0" percent="0.00"/>
+          <methods count="20" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="7" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <directory name="Constants">
+          <totals>
+            <lines total="26" comments="0" code="26" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+          <file name="EmailEvents.php" href="Event/Constants/EmailEvents.php.xml">
+            <totals>
+              <lines total="8" comments="0" code="8" executable="0" executed="0" percent="0"/>
+              <methods count="0" tested="0" percent="0"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="0" tested="0" percent="0"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="ImageEvents.php" href="Event/Constants/ImageEvents.php.xml">
+            <totals>
+              <lines total="10" comments="0" code="10" executable="0" executed="0" percent="0"/>
+              <methods count="0" tested="0" percent="0"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="0" tested="0" percent="0"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="VideoEvents.php" href="Event/Constants/VideoEvents.php.xml">
+            <totals>
+              <lines total="8" comments="0" code="8" executable="0" executed="0" percent="0"/>
+              <methods count="0" tested="0" percent="0"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="0" tested="0" percent="0"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <directory name="Listener">
+          <totals>
+            <lines total="39" comments="0" code="39" executable="11" executed="0" percent="0.00"/>
+            <methods count="3" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+          <file name="VideoListener.php" href="Event/Listener/VideoListener.php.xml">
+            <totals>
+              <lines total="39" comments="0" code="39" executable="11" executed="0" percent="0.00"/>
+              <methods count="3" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <directory name="Subscriber">
+          <totals>
+            <lines total="130" comments="1" code="129" executable="78" executed="0" percent="0.00"/>
+            <methods count="9" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="2" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+          <file name="EmailSubscriber.php" href="Event/Subscriber/EmailSubscriber.php.xml">
+            <totals>
+              <lines total="75" comments="1" code="74" executable="49" executed="0" percent="0.00"/>
+              <methods count="4" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="ImageSubscriber.php" href="Event/Subscriber/ImageSubscriber.php.xml">
+            <totals>
+              <lines total="55" comments="0" code="55" executable="29" executed="0" percent="0.00"/>
+              <methods count="5" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <file name="EmailEvent.php" href="Event/EmailEvent.php.xml">
+          <totals>
+            <lines total="20" comments="0" code="20" executable="6" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ImageCollectionEvent.php" href="Event/ImageCollectionEvent.php.xml">
+          <totals>
+            <lines total="20" comments="0" code="20" executable="6" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ImageEvent.php" href="Event/ImageEvent.php.xml">
+          <totals>
+            <lines total="18" comments="0" code="18" executable="6" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="VideoCollectionEvent.php" href="Event/VideoCollectionEvent.php.xml">
+          <totals>
+            <lines total="20" comments="0" code="20" executable="6" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Form">
+        <totals>
+          <lines total="223" comments="8" code="215" executable="72" executed="6" percent="8.33"/>
+          <methods count="14" tested="2" percent="14.29"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="7" tested="1" percent="14.29"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="CommentType.php" href="Form/CommentType.php.xml">
+          <totals>
+            <lines total="26" comments="0" code="26" executable="10" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="FigureType.php" href="Form/FigureType.php.xml">
+          <totals>
+            <lines total="47" comments="0" code="47" executable="12" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ForgotPasswordType.php" href="Form/ForgotPasswordType.php.xml">
+          <totals>
+            <lines total="25" comments="4" code="21" executable="9" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ImageType.php" href="Form/ImageType.php.xml">
+          <totals>
+            <lines total="34" comments="0" code="34" executable="6" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="RegistrationType.php" href="Form/RegistrationType.php.xml">
+          <totals>
+            <lines total="32" comments="0" code="32" executable="15" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ResetPasswordType.php" href="Form/ResetPasswordType.php.xml">
+          <totals>
+            <lines total="31" comments="4" code="27" executable="14" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="VideoType.php" href="Form/VideoType.php.xml">
+          <totals>
+            <lines total="28" comments="0" code="28" executable="6" executed="6" percent="100.00"/>
+            <methods count="2" tested="2" percent="100.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="1" percent="100.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Migrations">
+        <totals>
+          <lines total="119" comments="28" code="91" executable="39" executed="0" percent="0.00"/>
+          <methods count="8" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="4" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="Version20180829170931.php" href="Migrations/Version20180829170931.php.xml">
+          <totals>
+            <lines total="28" comments="7" code="21" executable="8" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Version20180904203453.php" href="Migrations/Version20180904203453.php.xml">
+          <totals>
+            <lines total="29" comments="7" code="22" executable="9" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Version20180904224205.php" href="Migrations/Version20180904224205.php.xml">
+          <totals>
+            <lines total="28" comments="7" code="21" executable="8" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Version20180909105247.php" href="Migrations/Version20180909105247.php.xml">
+          <totals>
+            <lines total="34" comments="7" code="27" executable="14" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Repository">
+        <totals>
+          <lines total="373" comments="252" code="121" executable="34" executed="8" percent="23.53"/>
+          <methods count="9" tested="2" percent="22.22"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="7" tested="1" percent="14.29"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="CategoryRepository.php" href="Repository/CategoryRepository.php.xml">
+          <totals>
+            <lines total="50" comments="36" code="14" executable="2" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="CommentRepository.php" href="Repository/CommentRepository.php.xml">
+          <totals>
+            <lines total="62" comments="36" code="26" executable="12" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="FigureRepository.php" href="Repository/FigureRepository.php.xml">
+          <totals>
+            <lines total="61" comments="36" code="25" executable="8" executed="8" percent="100.00"/>
+            <methods count="2" tested="2" percent="100.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="1" percent="100.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="GroupRepository.php" href="Repository/GroupRepository.php.xml">
+          <totals>
+            <lines total="50" comments="36" code="14" executable="3" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ImageRepository.php" href="Repository/ImageRepository.php.xml">
+          <totals>
+            <lines total="50" comments="36" code="14" executable="3" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="UserRepository.php" href="Repository/UserRepository.php.xml">
+          <totals>
+            <lines total="50" comments="36" code="14" executable="3" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="VideoRepository.php" href="Repository/VideoRepository.php.xml">
+          <totals>
+            <lines total="50" comments="36" code="14" executable="3" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <file name="Kernel.php" href="Kernel.php.xml">
+        <totals>
+          <lines total="61" comments="4" code="57" executable="21" executed="6" percent="28.57"/>
+          <methods count="5" tested="2" percent="40.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="1" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+      </file>
+    </directory>
+  </project>
+</phpunit>

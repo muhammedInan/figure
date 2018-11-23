@@ -16,7 +16,10 @@ use App\Form\ResetPasswordType;
 use App\Event\Constants\EmailEvents;
 use App\Event\EmailEvent;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\FormError;
+use App\Event\Constants\ImageEvents;
 
+use App\Event\ImageCollectionEvent;
 
 
 class SecurityController extends AbstractController
@@ -25,7 +28,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/inscription", name="security_registration")
      */
-    public function registration(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
+    public function registration(Request $request, ObjectManager $manager, EventDispatcherInterface $eventDispatcher, UserPasswordEncoderInterface $encoder)
     {
 
         $user = new User();
@@ -34,12 +37,20 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $event = new ImageCollectionEvent([$user->getImage()]);
+            $images = $eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
+            $user->setImage($images->getImages()[0]);
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
+            $user->setValidationToken(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
             $manager->persist($user);
+            $event = new ImageCollectionEvent([$user->getImage()]);
+            $eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
             $manager->flush();
+            $event = new EmailEvent($user);
+            $eventDispatcher->dispatch(EmailEvents::USER_REGISTERED, $event);
 
-            return $this->redirectToRoute('security_login');
+            return $this->redirectToRoute('security_registerConfirm');
         }
 
         return $this->render('security/registration.html.twig', [
@@ -61,7 +72,28 @@ class SecurityController extends AbstractController
     public function logout()
     {
     }
-    
+
+    /**
+     * @Route("/confirm_user/{token}", name="security_confirmUser")
+     */
+    public function confirmUser($token)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneByValidationToken($token);
+        if (is_null($user)) {
+            throw new NotFoundHttpException('Token invalide');
+        } else {
+            $user->setValidationToken(null);
+            $user->setIsActive(true);
+            $em->persist($user);
+            $em->flush();
+            return $this->render(
+                'security/confirm_user.html.twig',
+                []
+            );
+        }
+    }
+
     /**
      * @Route("/forgot_password", name="security_forgotPassword")
      */
@@ -89,7 +121,7 @@ class SecurityController extends AbstractController
             ['form' => $form->createView()]
         );
     }
-    
+
     /**
      * @Route("/reset_password/{token}", name="security_resetPassword")
      */
@@ -122,7 +154,7 @@ class SecurityController extends AbstractController
             ['form' => $form->createView()]
         );
     }
-    
+
     /**
      * @Route("/reset_password/{token}", name="security_resetPasswordConfirm")
      */
@@ -130,7 +162,7 @@ class SecurityController extends AbstractController
     {
         return $this->render('Password/reset_password_confirm.html.twig');
     }
-    
+
     /**
      * @Route("/forgot_password_confirm", name="security_forgotPasswordConfirm")
      */
@@ -138,13 +170,13 @@ class SecurityController extends AbstractController
     {
         return $this->render('Password/forgot_password_confirm.html.twig');
     }
-    
+
     /**
      * @Route("/reset_password_confirm", name="security_registerConfirm")
      */
     public function registerConfirm()
     {
-        return $this->render('Registration/register_confirm.html.twig');
+        return $this->render('security/register_confirm.html.twig');
     }
 }
 

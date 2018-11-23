@@ -45,30 +45,30 @@ class Figure
     private $createAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="figure", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="figure",cascade={"ALL"} )
      */
     private $comments;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="figures")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="figure", cascade={"All"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="figure", cascade={"ALL"})
      */
     private $images;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Video", cascade={ "All"}, orphanRemoval=true)
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", cascade={"ALL"}, mappedBy="figure", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $video;
+    private $videos;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="figures")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 
@@ -76,6 +76,7 @@ class Figure
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
         $this->createAt = new \Datetime();
     }
 
@@ -211,17 +212,47 @@ class Figure
         return $this;
     }
 
-    public function getVideo(): ?Video
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos()
     {
-        return $this->video;
+        return $this->videos;
     }
 
-    public function setVideo(Video $video): self
+    public function setVideos(Video $videos)
     {
-        $this->video = $video;
+        foreach ($videos as  $video) {
+            $video->extractIdentif();
+        } 
+        
+        $this->videos = $videos;
+        
 
         return $this;
     }
+
+    public function appendVideos($videos)
+    {
+        foreach ($videos as $video) {
+            $video->setFigure($this);
+        }
+        $this->videos = array_merge($this->videos->toArray(), $videos);
+        return $this;
+    }
+
+    public function addVideo(Video $video)
+    {
+        $this->videos[] = $video;
+        $video->setFigure($this);
+        return $this;
+    }
+
+    public function removeVideo(Video $video)
+    {
+        $this->videos->removeElement($video);
+    }
+
 
     public function getUser(): ?User
     {
@@ -234,6 +265,5 @@ class Figure
 
         return $this;
     }
-
 }
 

@@ -6,6 +6,8 @@
 parameters:
     locale: 'en'
     no-reply: 'muhammed-inan@outlook.com'
+    pagination-trick: 10
+    pagination-comment: 10
 
 services:
     # default configuration for services in *this* file
@@ -36,11 +38,7 @@ services:
     App\Event\Subscriber\EmailSubscriber:
         $sender: '%no-reply%'
         
-    App\Event\Listener\VideoListener:
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }    
-         #   - { name: doctrine.event_listener, event: preFlush }    
+
         
         
     
