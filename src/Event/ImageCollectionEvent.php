@@ -21,3 +21,4 @@ class ImageCollectionEvent extends Event
          return $this->images;
       }
 }
+

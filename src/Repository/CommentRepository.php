@@ -23,7 +23,7 @@ class CommentRepository extends ServiceEntityRepository
 
     public function getPaginateListOfComments(Figure $figure,$page, $nbElements = 10)
     {
-        $firstResult = ($page ) * $nbElements;
+        $firstResult = ($page-1 ) * $nbElements;
         return $this->createQueryBuilder('comment')
             ->where('comment.figure = :figure')
             ->setParameter('figure',$figure)

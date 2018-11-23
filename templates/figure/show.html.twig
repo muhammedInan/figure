@@ -57,26 +57,40 @@
                 {{ form_end(delete_form) }}
             </div>
             {% endif %}
-            {% if app.user == figure.user %}
+
             {% for image in figure.images %}
-                
-                <a href="{{ path('image_remove',{id: image.id}) }}"><i class="my-remove-alert fas fa-trash-alt fa-2x"></i><img src="{{ asset(image.webPath) }}" alt="figure"></a>
+                {% if app.user == figure.user %}
+                    <a href="{{ path('image_remove',{id: image.id}) }}"><i
+                                class="my-remove-alert fas fa-trash-alt fa-2x"></i></a>
+                {% endif %}
+                <img src="{{ asset(image.webPath) }}" alt="figure">
             {% endfor %}
-            {% endif %}
+
         </div>
         <strong><p>Description : </p></strong>
         <div><p>{{ figure.content | raw }} </p></div>
         <strong><p>Lien : </p></strong>
         <div style="height :200px ;width :200px; display:inline">
-            {% if app.user == figure.user %}
+
             {% for video in figure.videos %}
-               
-                <a href="{{ path('video_remove',{id: video.id}) }}"> {{ video.video()|raw }}<i class="my-remove-alert fas fa-trash-alt fa-2x"></i></a>
-                {% endfor %}
-                {% endif %}
-         </div>
+                <div class="card">
+                    {{ video.video()|raw }}
+                    <div class="card-body">
+                        {% if app.user == figure.user %}
+
+                            <a class="card-link" href="{{ path('video_remove',{id: video.id}) }}"> <i
+                                        class="my-remove-alert fas fa-trash-alt fa-2x"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                </div>
+            {% endfor %}
+
+        </div>
         </br>
-        <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y') }} à {{ figure.createAt | date('H:i') }}</div>
+        <div class="metadata">Ecrit le {{ figure.createAt | date('d/m/Y') }}
+            à {{ figure.createAt | date('H:i') }}</div>
         <div class="metadata"> Dans la catégorie: {{ figure.category.title }}</div>
     </article>
     </br>
@@ -111,18 +125,20 @@
                 </div>
             </div>
 
-
         {% endfor %}
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 {% if page > 1 %}
-                    <li class="page-item"><a class="page-link" href="{{path('figure_show',{'id':figure.id,'page':page - 1})}}">Previous</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="{{ path('figure_show',{'id':figure.id,'page':page - 1}) }}">Previous</a>
+                    </li>
                 {% endif %}
                 {% if page < nb_pages %}
-                    <li class="page-item"><a class="page-link" href="{{path('figure_show',{'id':figure.id,'page':page + 1})}}">Next</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="{{ path('figure_show',{'id':figure.id,'page':page + 1}) }}">Next</a>
+                    </li>
                 {% endif %}
             </ul>
         </nav>
-
     </section>
 {% endblock %}

@@ -28,6 +28,7 @@ class ImageSubscriber implements EventSubscriberInterface
         }
         return $event->getImages();
     }
+
     public function imagePostUpload(ImageCollectionEvent $event)
     {
         foreach($event->getImages() as $image){
@@ -41,6 +42,7 @@ class ImageSubscriber implements EventSubscriberInterface
             $image->storeFilenameForRemove();
         }
     }
+
     public function imagePostRemove(ImageCollectionEvent $event)
     {
         foreach($event->getImages() as $image){
@@ -48,8 +50,4 @@ class ImageSubscriber implements EventSubscriberInterface
         }
     }
 }
-
-
-
-
 

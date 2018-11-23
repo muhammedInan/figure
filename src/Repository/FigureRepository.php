@@ -19,7 +19,7 @@ class FigureRepository extends ServiceEntityRepository
         parent::__construct($registry, Figure::class);
     }
 
-    public function getPaginateListOfFigures($page = 1, $nbElements = 10)
+    public function getPaginateListOfFigures($page = 1, $nbElements = 5)
     {
         $firstResult = ($page - 1) * $nbElements;
         return $this->createQueryBuilder('figure')

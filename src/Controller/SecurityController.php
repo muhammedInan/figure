@@ -17,6 +17,9 @@ use App\Event\Constants\EmailEvents;
 use App\Event\EmailEvent;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormError;
+use App\Event\Constants\ImageEvents;
+
+use App\Event\ImageCollectionEvent;
 
 
 class SecurityController extends AbstractController
@@ -34,14 +37,18 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $event = new ImageCollectionEvent([$user->getImage()]);
+            $images = $eventDispatcher->dispatch(ImageEvents::PRE_UPLOAD, $event);
+            $user->setImage($images->getImages()[0]);
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $user->setValidationToken(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
             $manager->persist($user);
+            $event = new ImageCollectionEvent([$user->getImage()]);
+            $eventDispatcher->dispatch(ImageEvents::POST_UPLOAD, $event);
             $manager->flush();
             $event = new EmailEvent($user);
             $eventDispatcher->dispatch(EmailEvents::USER_REGISTERED, $event);
-
 
             return $this->redirectToRoute('security_registerConfirm');
         }

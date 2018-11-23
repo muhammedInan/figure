@@ -18,7 +18,6 @@ class CommentType extends AbstractType
                 ->add('content')
             ;
 
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

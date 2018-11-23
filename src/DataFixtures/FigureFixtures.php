@@ -12,10 +12,8 @@ use App\Entity\Image;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
 class FigureFixtures extends Fixture
 {
-
     private $encoder;
 
     public function __construct(UserPasswordEncoderInterface $encoder)
@@ -26,8 +24,6 @@ class FigureFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-
-
         $videos = [
             'https://www.youtube.com/watch?v=myZKTpqbAyg',
             'https://www.youtube.com/watch?v=n0F6hSpxaFc',
@@ -42,38 +38,18 @@ class FigureFixtures extends Fixture
         ];
 
         $images = [
-            '0f74346f7c57747a75a91b2a51bdc982a8e427de.jpeg',
-            '88ca9205e34a97a59d63f6bd90f83af9795f296a.jpeg',
-            '28e9b0b18c216212c974bd975334dfb2a66dcd82.jpeg',
-            '460af889b3b86bdb340523f3f018e7b891116e3d.jpeg',
-            '628e8dd4019e901fc053b6dc4d90d8fcdd6036d8.jpeg',
-            'bbf5e900cb1fd17fedbb4a5b2d8341a0bb6e011f.jpeg',
-            'cc8dc569bdcf6df14dc5e1f469ee3fa9d34d2b08.jpeg',
-            '7d038557847baec98c710a29aab7d5fd57887c3e.jpeg',
-            'bc0c32ebf3a1975546ac6b3ce49b2b687057f6e2.jpeg',
+            'image.jpg',
+            'image2.jpg',
+            'image3.jpg',
+            'image4.jpg',
+            'image5.jpg',
+            'image10.jpg',
+            'image7.jpg',
+            'image8.jpg',
+            'image9.jpg',
         ];
 
         $faker = \Faker\Factory::create('fr_FR');
-
-        foreach ($images as $k => $file_name) {
-            for($j=0;$j<=20;$j++) {
-                $image = new Image();
-                $image->setPath($k['public\images\uploads\image.jpg']);
-
-                $this->addReference('image-' . $k . 'mute' . $j, $image);
-                $manager->persist($image);
-            }
-        }
-
-        foreach ($videos as $v => $url) {
-            for($l=0;$l<=20;$l++) {
-                $video = new Video();
-                $video->extractIdentif($v['https://www.youtube.com/embed/KEdFwJ4SWq4']);
-
-                $this->addReference('video-' . $v . 'mute' . $l, $video);
-                $manager->persist($video);
-            }
-        }
 
         $user = (new User());
         $user->setEmail('muhammed-inan@outlook.com');
@@ -81,6 +57,9 @@ class FigureFixtures extends Fixture
         $user->setUsername('toto');
         $user->setPassword('totototo');
         $user->setLastname('inan');
+        $password = $this->encoder->encodePassword($user, $user->getPassword());
+        $user->setPassword($password);
+        $manager->persist($user);
         $userConfirm = (new User());
         $userConfirm->setEmail('muhammed-inan@outlook.com');
         $userConfirm->setFirstname('muhammed');
@@ -88,6 +67,9 @@ class FigureFixtures extends Fixture
         $userConfirm->setPassword('totototo');
         $userConfirm->setLastname('inan');
         $userConfirm->setValidationToken('my_test_validation_token');
+        $password = $this->encoder->encodePassword($userConfirm, $userConfirm->getPassword());
+        $userConfirm->setPassword($password);
+        $manager->persist($userConfirm);
         $userReinit = (new User());
         $userReinit->setEmail('muhammed-inan@outlook.com');
         $userReinit->setUsername('toto');
@@ -95,53 +77,107 @@ class FigureFixtures extends Fixture
         $userReinit->setLastname('inan');
         $userReinit->setResetToken('my_test_reset_token');
 
-        $password = $this->encoder->encodePassword($user, $user->getPassword());
-        $user->setPassword($password);
-        $manager->persist($user);
-        $manager->persist($userConfirm);
-        $manager->persist($userReinit);
+        $password = $this->encoder->encodePassword($userReinit, $userReinit->getPassword());
+        $userReinit->setPassword($password);
 
+        $manager->persist($userReinit);
 
         $image = new Image();
 
-        $image->setPath('88ca9205e34a97a59d63f6bd90f83af9795f296a.jpeg');
+        $image->setPath('image2.jpg');
         $user->setImage($image);
 
-        for ($i = 1; $i <= 3; $i++) {
+    $categories = [
+        'Les grabs',
+        'Les rotations',
+        'Les flips',
+    ];
+        foreach ($categories as $titleCategory) {
             $category = new Category();
-            $category->setTitle($faker->sentence());
-
+            $category->setTitle($titleCategory);
 
             $manager->persist($category);
         }
 
+        $figures = [
+            [
+                 'title' => 'mute',
 
-        for ($j = 1; $j <= 5; $j++) {
+                 'content' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
+            ],
+            [
+                'title' => 'sad',
+
+                'content' => 'saisie de la carre backside de la planche, entre les deux pieds, avec la main avant ',
+            ],
+            [
+                'title' => 'indy',
+
+                'content' => 'saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière ',
+            ],
+            [
+                'title' => '360',
+
+                'content' => 'trois six pour un tour complet ',
+            ],
+            [
+                'title' => '180',
+
+                'content' => 'désigne un demi-tour, soit 180 degrés d\'angle ',
+            ],
+            [
+                'title' => 'Hakon Flip',
+
+                'content' => 'de manière beaucoup plus rare, et se confondent souvent avec certaines rotations horizontales désaxées',
+            ],
+            [
+                'title' => 'truck driver',
+
+                'content' => 'saisie du carre avant et carre arrière avec chaque main ',
+            ],
+            [
+                'title' => 'seat belt',
+
+                'content' => 'saisie du carre frontside à l\'arrière avec la main avant',
+            ],
+            [
+                'title' => '720',
+
+                'content' => 'sept deux pour deux tours complets',
+            ],
+            [
+                'title' => 'Mac Twist',
+
+                'content' => 'On distingue les front flips, rotations en avant, et les back flips, rotations en arrière ',
+            ],
+        ];
+
+        foreach($figures as $dataFigure) {
             $figure = new Figure();
             $content = '<p>' . join($faker->paragraphs(5), '</p><p>') .
                 '</p>';
-            $figure->setTitle($faker->sentence())
-                ->setContent($content)
+            $figure->setTitle($dataFigure['title'])
+                ->setContent($dataFigure['content'])
                 ->setCreateAt($faker->DateTimeBetween('-6 months'))
                 ->setCategory($category);
 
+            for($i=0;$i <= $length = mt_rand(1,sizeof($images)-1);$i++) {
+                $image = new Image();
+                $image->setPath($images[mt_rand(0, sizeof($images)-1)]);
+                $figure->addImage($image);
 
+          }
+            for($i=0;$i <= $length = mt_rand(1,sizeof($videos)-1);$i++) {
+                $video = new Video();
+                $video->setUrl($videos[mt_rand(0, sizeof($videos)-1)]);
+                $video->extractIdentif();
+                $figure->addVideo($video);
 
+            }
 
-
-
-
+            $figure->setUser($user);
             $manager->persist($figure);
         }
-
-//        for ($l = 1; $l <= 2; $l++) {
-//            $videos = new Video();
-//            $videos->setUrl($videos[$l - 1]);
-//            $videos->setIdentif($videos);
-//
-//            $manager->persist($videos);
-//        }
-
 
         for ($k = 1; $k <= mt_rand(4, 6); $k++) {
             $comment = new Comment();
@@ -155,9 +191,7 @@ class FigureFixtures extends Fixture
             $manager->persist($comment);
         }
 
-
         $manager->flush();
-
 
     }
 }

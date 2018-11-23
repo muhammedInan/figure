@@ -23,15 +23,7 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-
-
- 
-
-
-
 
 class FigureControllerTest extends WebTestCase
 {
@@ -75,9 +67,6 @@ class FigureControllerTest extends WebTestCase
 
     }
     
-   
-
-
     public function testIndex()
     {
         $figure = new Figure();
@@ -122,9 +111,7 @@ class FigureControllerTest extends WebTestCase
              
      }
     
-
-    
-    public function testDelete()
+     public function testDelete()
     {
      $this->createMock(AccessDeniedException::class);
     $figure = new Figure();
@@ -142,10 +129,6 @@ class FigureControllerTest extends WebTestCase
         }catch(\Exception $e){
             $this->assertEquals('Access Denied.',$e->getMessage()); 
         }
-
-
     }
-    
-
-
 }
+

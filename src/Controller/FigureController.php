@@ -47,7 +47,7 @@ class FigureController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $allFigures = $em->getRepository(Figure::class)->findAll();
-        $nbPages = ceil(count($allFigures) / 10);
+        $nbPages = ceil(count($allFigures) / 5);
         $figures = $em->getRepository(Figure::class)->getPaginateListOfFigures($page);
 
         return $this->render('figure/index.html.twig', [
@@ -190,12 +190,12 @@ class FigureController extends AbstractController
     }
 
     /**
-     * @Route("/figure/{id}", name="figure_show")
+     * @Route("/figure/{id}/{page}", name="figure_show")
      */
-    public function show(Figure $figure, Request $request, ObjectManager $manager)
+    public function show(Figure $figure, Request $request, ObjectManager $manager, $page = 1)
     {
-        $page = $request->query->get('page');
-
+        //$page = $request->query->get('page');
+           //var_dump($page);die;
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
@@ -204,10 +204,6 @@ class FigureController extends AbstractController
         $allComments = $em->getRepository(Comment::class)->findByFigure($figure);
         $nbPages = ceil(count($allComments) / 10);
         $commentpagi = $em->getRepository(Comment::class)->getPaginateListOfComments( $figure,$page);
-
-
-
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setCreatedAt(new \DateTime())
